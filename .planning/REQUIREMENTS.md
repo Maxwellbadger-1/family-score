@@ -94,14 +94,42 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| AUTH-01…04 | — | Not mapped |
-| FAM-01…05 | — | Not mapped |
-| LOG-01…06 | — | Not mapped |
-| DASH-01…05 | — | Not mapped |
-| SCORE-01…03 | — | Not mapped |
-| WIDGET-01…05 | — | Not mapped |
-| KID-01…03 | — | Not mapped |
-| SETTINGS-01…03 | — | Not mapped |
-| SYNC-01…03 | — | Not mapped |
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| FAM-01 | Phase 3 | Pending |
+| FAM-02 | Phase 3 | Pending |
+| FAM-03 | Phase 3 | Pending |
+| FAM-04 | Phase 3 | Pending |
+| FAM-05 | Phase 3 | Pending |
+| KID-01 | Phase 3 | Pending |
+| SETTINGS-03 | Phase 3 | Pending |
+| LOG-01 | Phase 4 | Pending |
+| LOG-02 | Phase 4 | Pending |
+| LOG-03 | Phase 4 | Pending |
+| LOG-04 | Phase 4 | Pending |
+| LOG-05 | Phase 4 | Pending |
+| LOG-06 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Pending |
+| DASH-03 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Pending |
+| DASH-05 | Phase 4 | Pending |
+| SCORE-01 | Phase 4 | Pending |
+| SCORE-02 | Phase 4 | Pending |
+| SCORE-03 | Phase 4 | Pending |
+| SYNC-01 | Phase 5 | Pending |
+| SYNC-02 | Phase 5 | Pending |
+| SYNC-03 | Phase 5 | Pending |
+| WIDGET-01 | Phase 5 | Pending |
+| WIDGET-02 | Phase 5 | Pending |
+| WIDGET-03 | Phase 5 | Pending |
+| WIDGET-04 | Phase 5 | Pending |
+| WIDGET-05 | Phase 5 | Pending |
+| SETTINGS-01 | Phase 6 | Pending |
+| SETTINGS-02 | Phase 6 | Pending |
+| KID-02 | Phase 6 | Pending |
+| KID-03 | Phase 6 | Pending |
 
-*Total: 36 v1 requirements*
+*Total: 36 v1 requirements — 36/36 mapped*
