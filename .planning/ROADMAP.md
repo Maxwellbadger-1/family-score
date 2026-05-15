@@ -12,7 +12,7 @@ Family Score is built in six phases that follow a strict dependency order dictat
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Xcode project, App Group, Supabase schema + RLS, FamilyScoreKit package — no user-visible features, blocks everything else
+- [x] **Phase 1: Foundation** - Xcode project, App Group, Supabase schema + RLS, FamilyScoreKit package — no user-visible features, blocks everything else *(completed 2026-05-15)*
 - [ ] **Phase 2: Authentication** - Sign-up, Sign in with Apple, persistent sessions, sign-out
 - [ ] **Phase 3: Family Core** - Family creation, invite flow, member profiles, child account setup
 - [ ] **Phase 4: Activity Logging & Dashboard** - Core product loop: log activities, ring visualizations, score engine, dashboard views
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. FamilyScoreKit local Swift package exists and is linked to the main app target only (widget extension has no Supabase SDK dependency)
 **Plans**: 3 plans
 Plans:
-- [ ] 01-PLAN-01.md — Xcode-Projektstruktur: zwei Targets (App + Widget Extension), App Group Entitlements, xcconfig-Secrets-System
-- [ ] 01-PLAN-02.md — FamilyScoreKit lokales Swift Package: WidgetData (Sendable), appGroupIdentifier, keine externen Abhaengigkeiten
-- [ ] 01-PLAN-03.md — Supabase Integration: supabase-swift SPM, SupabaseClient Singleton, SQL-Migration (DDL + RLS + Trigger), Schema Push, SC-3/SC-4 Verifikation
+- [x] 01-PLAN-01.md — Xcode-Projektstruktur: zwei Targets (App + Widget Extension), App Group Entitlements, xcconfig-Secrets-System
+- [x] 01-PLAN-02.md — FamilyScoreKit lokales Swift Package: WidgetData (Sendable), appGroupIdentifier, keine externen Abhaengigkeiten
+- [x] 01-PLAN-03.md — Supabase Integration: supabase-swift SPM, SupabaseClient Singleton, SQL-Migration (DDL + RLS + Trigger), Schema Push, SC-3/SC-4 Verifikation
 
 ### Phase 2: Authentication
 **Goal**: Users can create an account and stay securely logged in across restarts, or sign in with Apple, and sign out at will
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 0/3 | Not started | - |
 | 3. Family Core | 0/TBD | Not started | - |
 | 4. Activity Logging & Dashboard | 0/TBD | Not started | - |
