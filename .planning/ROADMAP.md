@@ -31,7 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Supabase schema is live with all tables (families, family_members, activity_entries, category_config, family_invites, weekly_summaries) and every table has RLS enabled with real policies — verified by a Swift client call, not the Supabase dashboard
   4. Secrets.xcconfig is gitignored and the Supabase anon key is absent from every committed file
   5. FamilyScoreKit local Swift package exists and is linked to the main app target only (widget extension has no Supabase SDK dependency)
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 01-PLAN-01.md — Xcode-Projektstruktur: zwei Targets (App + Widget Extension), App Group Entitlements, xcconfig-Secrets-System
+- [ ] 01-PLAN-02.md — FamilyScoreKit lokales Swift Package: WidgetData (Sendable), appGroupIdentifier, keine externen Abhaengigkeiten
+- [ ] 01-PLAN-03.md — Supabase Integration: supabase-swift SPM, SupabaseClient Singleton, SQL-Migration (DDL + RLS + Trigger), Schema Push, SC-3/SC-4 Verifikation
 
 ### Phase 2: Authentication
 **Goal**: Users can create an account and stay securely logged in across restarts, or sign in with Apple, and sign out at will
@@ -42,7 +46,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can sign in with Apple (including the Edge Function invite path so the service role key never lives in the client)
   3. User remains logged in after force-quitting and reopening the app
   4. User can sign out from any screen and is returned to the login screen with no residual data visible
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — Wave 0: XCTest-Infrastruktur (FamilyScoreTests-Target, AppState.swift, AuthServiceTests-Stubs, MockAuthService + AuthServiceProtocol)
+- [ ] 02-02-PLAN.md — Wave 1: AuthService (ObservableObject, authStateChanges), RootView (AppState-Routing), LoginView + RegisterView + AuthFlowView
+- [ ] 02-03-PLAN.md — Wave 2: Sign in with Apple (Nonce-Fluss, ASAuthorizationController), FamilyScoreApp.swift Integration, Geraete-Checkpoint
 
 ### Phase 3: Family Core
 **Goal**: Users can form or join a family group, see all members, manage roles, and set up child profiles — family isolation enforced by RLS
@@ -105,8 +113,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
-| 2. Authentication | 0/TBD | Not started | - |
+| 1. Foundation | 0/3 | Not started | - |
+| 2. Authentication | 0/3 | Not started | - |
 | 3. Family Core | 0/TBD | Not started | - |
 | 4. Activity Logging & Dashboard | 0/TBD | Not started | - |
 | 5. Real-time & Widgets | 0/TBD | Not started | - |
