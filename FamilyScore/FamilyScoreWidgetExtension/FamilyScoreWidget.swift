@@ -1,5 +1,6 @@
 import WidgetKit
 import SwiftUI
+import FamilyScoreKit
 
 struct FamilyScoreProvider: TimelineProvider {
     func placeholder(in context: Context) -> FamilyScoreEntry {
@@ -14,7 +15,7 @@ struct FamilyScoreProvider: TimelineProvider {
     func getTimeline(in context: Context,
                      completion: @escaping (Timeline<FamilyScoreEntry>) -> Void) {
         #if DEBUG
-        let debugDefaults = UserDefaults(suiteName: "group.com.familyscore")
+        let debugDefaults = UserDefaults(suiteName: appGroupIdentifier)
         let appWroteValue = debugDefaults?.bool(forKey: "phase1_verification") ?? false
         print("[Widget] App Group read from Widget: \(appWroteValue ? "PASS" : "FAIL")")
         #endif

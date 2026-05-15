@@ -326,9 +326,13 @@ create policy "Admin verwaltet Einladungen"
   on public.family_invites for all to authenticated
   using (public.is_family_admin(family_id));
 
-create policy "Jeder authentifizierte User kann Einladung per Token lesen"
+-- CR-01 fix: restrict to family members + invite creator (no token exposure to unrelated users)
+create policy "Familienmitglieder und Ersteller koennen Einladungen lesen"
   on public.family_invites for select to authenticated
-  using (true);
+  using (
+    public.is_family_member(family_id)
+    OR created_by = (SELECT auth.uid())
+  );
 
 -- =============================================================================
 -- RLS: weekly_summaries
