@@ -1,0 +1,6 @@
+// Config.xcconfig
+// Committed to Git — enthält keine Secrets
+#include "Secrets.xcconfig"
+
+SUPABASE_URL = $(SUPABASE_URL_SECRET)
+SUPABASE_KEY = $(SUPABASE_KEY_SECRET)
