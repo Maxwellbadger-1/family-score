@@ -62,7 +62,12 @@ Plans:
   3. Admin can remove a member and that member can no longer see the family's data
   4. Admin can change any member's role (Admin / Adult / Child-simplified)
   5. Each member has a visible profile with name and avatar color; parent-managed child profiles appear in the member list without requiring a separate device login
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 03-01-PLAN.md — Wave 0: SQL-Migrationsdatei (child_profiles DDL, 4 SECURITY DEFINER RPCs, RLS-Policies), FamilyService-Test-Infrastruktur (FamilyServiceProtocol, MockFamilyService, 10 Teststubs)
+- [ ] 03-02-PLAN.md — Wave 1: [BLOCKING] supabase db push + FamilyService (ObservableObject, alle RPCs) + AuthService.refreshFamilyStatus()
+- [ ] 03-03-PLAN.md — Wave 2: SwiftUI Family-Views (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView)
+- [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Geraete-Checkpoint (5 Success Criteria)
 
 ### Phase 4: Activity Logging & Dashboard
 **Goal**: Family members can log activities and see time and score data for themselves and the whole family — the complete core product loop works end to end
@@ -115,7 +120,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 0/3 | Not started | - |
-| 3. Family Core | 0/TBD | Not started | - |
+| 3. Family Core | 0/4 | Not started | - |
 | 4. Activity Logging & Dashboard | 0/TBD | Not started | - |
 | 5. Real-time & Widgets | 0/TBD | Not started | - |
 | 6. Settings & Polish | 0/TBD | Not started | - |
