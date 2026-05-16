@@ -21,6 +21,9 @@ struct FamilyScoreApp: App {
                 // kann INITIAL_SESSION bereits gesendet worden sein bevor die Beobachtung startet.
                 // Source: RESEARCH.md Pitfall 2
                 .task {
+                    // In XCTest-Umgebung nicht starten — Tests nutzen MockAuthService,
+                    // und Supabase haengt 227s auf placeholder.supabase.co (TCP-Timeout)
+                    guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
                     await authService.startObserving()
                 }
                 // Hintergrund: App wird schwarz wenn scenePhase = .background
