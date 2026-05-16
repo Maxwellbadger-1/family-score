@@ -48,14 +48,22 @@ Diese Regeln stammen aus der Recherche und dürfen NICHT gebrochen werden:
 - **App Group Entitlement** — in beiden Targets (App + Widget Extension) konfigurieren
 
 ### GitHub Actions / CI (Regeln aus wiederholten Fehlern)
-- **`generic/platform=iOS Simulator` NUR für `build`** — für `test` IMMER konkreten Simulator: `platform=iOS Simulator,name=Any iOS Simulator Device`
+- **`generic/platform=iOS Simulator` NUR für `build`** — für `test` IMMER echten Simulator per UDID (python3-Script im workflow ermittelt ihn dynamisch); `Any iOS Simulator Device` ohne OS-Version hängt
 - **SPM-Cache via `-clonedSourcePackagesDirPath ~/spm-packages`** — immer diesen Flag bei `build`, `test` und `resolvePackageDependencies` setzen; Caching-Key = `hashFiles('FamilyScore/project.yml')`
 - **NIEMALS `rm -rf DerivedData`** als regulären CI-Schritt — das sabotiert jeden Cache
 - **Einen einzigen Job** für Build + Test — zwei separate Jobs downloaden SPM-Pakete doppelt
 - **Explicit `resolvePackageDependencies`** als eigenen Schritt vor dem Build — vermeidet Timeout-Fehler beim ersten Build-Schritt
-- **XcodeGen via Homebrew cachen** — `actions/cache` auf `/usr/local/Cellar/xcodegen` mit fixem Cache-Key; nur installieren wenn Cache-Miss
-- **xcpretty via gem cachen** — `~/.gem` cachen; vor `gem install` prüfen ob bereits installiert: `gem list xcpretty --installed --quiet || gem install xcpretty --no-document`
 - **Secrets.xcconfig vor XcodeGen** erstellen — XcodeGen liest xcconfig-Referenzen; falscher Schritt-Order führt zu Build-Fehlern
+
+### XCTest / Test-Architektur (Regeln aus wiederholten Fehlern)
+- **IMMER `XCTestConfigurationFilePath` prüfen** vor Supabase-Verbindungen im App-Entry-Point — Supabase hängt in CI 227s auf `placeholder.supabase.co` und crasht den Test-Host mit `signal trap`:
+  ```swift
+  guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
+  await authService.startObserving()
+  ```
+- **Test-Host crasht mit `signal trap`** = externe Verbindung blockiert Main-Thread oder TCP-Timeout tötet Bootstrap — NICHT ein Compilation-Fehler
+- **`Bundle.main` im Test-Context** = App-Bundle (nicht Test-Bundle) — xcconfig-Werte werden korrekt substituiert, ABER Netzwerk-Calls mit Placeholder-URLs hängen
+- **Unit-Tests sollen NIE echte Supabase-Calls machen** — immer `MockAuthService`/Protokoll-Abstraktion nutzen; der globale `supabase`-Singleton in `Supabase.swift` darf in Tests nie initialisiert werden
 
 ## Tech Stack
 
