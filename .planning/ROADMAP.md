@@ -49,7 +49,7 @@ Plans:
 **Plans**: 3 plans
 Plans:
 - [x] 02-01-PLAN.md — Wave 0: XCTest-Infrastruktur (FamilyScoreTests-Target, AppState.swift, AuthServiceTests-Stubs, MockAuthService + AuthServiceProtocol) *(completed 2026-05-16)*
-- [ ] 02-02-PLAN.md — Wave 1: AuthService (ObservableObject, authStateChanges), RootView (AppState-Routing), LoginView + RegisterView + AuthFlowView
+- [x] 02-02-PLAN.md — Wave 1: AuthService (ObservableObject, authStateChanges), RootView (AppState-Routing), LoginView + RegisterView + AuthFlowView *(completed 2026-05-16)*
 - [ ] 02-03-PLAN.md — Wave 2: Sign in with Apple (Nonce-Fluss, ASAuthorizationController), FamilyScoreApp.swift Integration, Geraete-Checkpoint
 
 ### Phase 3: Family Core
@@ -119,7 +119,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
-| 2. Authentication | 1/3 | In Progress | - |
+| 2. Authentication | 2/3 | In Progress | - |
 | 3. Family Core | 0/4 | Not started | - |
 | 4. Activity Logging & Dashboard | 0/TBD | Not started | - |
 | 5. Real-time & Widgets | 0/TBD | Not started | - |

@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 2 of 6 (Authentication)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In Progress (executing)
-Last activity: 2026-05-16 — 02-01 complete (Wave 0: XCTest infrastructure — AppState, MockAuthService, AuthServiceTests)
+Last activity: 2026-05-16 — 02-02 complete (Wave 1: AuthService ObservableObject + authStateChanges loop + RootView + Auth Views)
 
-Progress: [██░░░░░░░░] 22%
+Progress: [███░░░░░░░] 28%
 
 ## Performance Metrics
 
@@ -28,10 +28,10 @@ Progress: [██░░░░░░░░] 22%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 3 | — | — |
-| 2. Authentication | 1 | ~2min | ~2min |
+| 2. Authentication | 2 | ~22min | ~11min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 01-02, 01-03, 02-01
+- Last 5 plans: 01-01, 01-02, 01-03, 02-01, 02-02
 - Trend: —
 
 *Updated after each plan completion*
@@ -50,6 +50,9 @@ Recent decisions affecting current work:
 - Auth Wave 0: AppState is final — Plan 02 does NOT modify it; AuthService reads/writes it via authStateChanges
 - Auth Wave 0: AuthServiceProtocol defined in test target MockAuthService.swift; Plan 02 AuthService implicitly conforms
 - Auth Wave 0: FamilyScoreTests Xcode target registration requires Mac (same pattern as Phase 1)
+- Auth Wave 1: AuthService.startObserving() is NOT called in RootView — only FamilyScoreApp.swift (Plan 02-03) starts the loop to prevent two concurrent AsyncStream loops causing race conditions
+- Auth Wave 1: ObservableObject + @Published used throughout Views and AuthService (NOT @Observable) — iOS 16.0 minimum enforced
+- Auth Wave 1: KeychainLocalStorage(service: com.familyscore) added to Supabase.swift to prevent macOS/iOS Keychain prompt bug (Discussion #28132)
 
 ### Pending Todos
 
@@ -75,5 +78,5 @@ Items acknowledged and carried forward:
 ## Session Continuity
 
 Last session: 2026-05-16
-Stopped at: Phase 2 Plan 01 complete — XCTest Wave 0 infrastructure: AppState.swift, MockAuthService.swift, AuthServiceTests.swift (8 stubs). FamilyScoreTests Xcode target registration requires Mac.
+Stopped at: Phase 2 Plan 02 complete — AuthService (ObservableObject + authStateChanges loop), Supabase.swift (KeychainLocalStorage), RootView, AuthFlowView, LoginView, RegisterView. Build verification requires Mac. Next: Plan 02-03 (Sign in with Apple + FamilyScoreApp.swift wiring).
 Resume file: None
