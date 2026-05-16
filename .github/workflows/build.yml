@@ -34,11 +34,11 @@ jobs:
       - name: Install xcpretty
         run: gem list xcpretty --installed --quiet || gem install xcpretty --no-document
 
-      - name: Create Secrets.xcconfig (CI-Platzhalter)
+      - name: Create Secrets.xcconfig
         run: |
-          cat > FamilyScore/Config/Secrets.xcconfig << 'EOF'
-          SUPABASE_URL_SECRET = https://placeholder.supabase.co
-          SUPABASE_KEY_SECRET = placeholder-anon-key
+          cat > FamilyScore/Config/Secrets.xcconfig << EOF
+          SUPABASE_URL_SECRET = ${{ secrets.SUPABASE_URL_SECRET }}
+          SUPABASE_KEY_SECRET = ${{ secrets.SUPABASE_KEY_SECRET }}
           EOF
 
       - name: Generate Xcode Project
