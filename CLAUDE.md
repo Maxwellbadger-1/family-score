@@ -47,6 +47,16 @@ Diese Regeln stammen aus der Recherche und dürfen NICHT gebrochen werden:
 - **FamilyScoreKit** — shared Swift Package für Code zwischen App und Widget Extension
 - **App Group Entitlement** — in beiden Targets (App + Widget Extension) konfigurieren
 
+### GitHub Actions / CI (Regeln aus wiederholten Fehlern)
+- **`generic/platform=iOS Simulator` NUR für `build`** — für `test` IMMER konkreten Simulator: `platform=iOS Simulator,name=Any iOS Simulator Device`
+- **SPM-Cache via `-clonedSourcePackagesDirPath ~/spm-packages`** — immer diesen Flag bei `build`, `test` und `resolvePackageDependencies` setzen; Caching-Key = `hashFiles('FamilyScore/project.yml')`
+- **NIEMALS `rm -rf DerivedData`** als regulären CI-Schritt — das sabotiert jeden Cache
+- **Einen einzigen Job** für Build + Test — zwei separate Jobs downloaden SPM-Pakete doppelt
+- **Explicit `resolvePackageDependencies`** als eigenen Schritt vor dem Build — vermeidet Timeout-Fehler beim ersten Build-Schritt
+- **XcodeGen via Homebrew cachen** — `actions/cache` auf `/usr/local/Cellar/xcodegen` mit fixem Cache-Key; nur installieren wenn Cache-Miss
+- **xcpretty via gem cachen** — `~/.gem` cachen; vor `gem install` prüfen ob bereits installiert: `gem list xcpretty --installed --quiet || gem install xcpretty --no-document`
+- **Secrets.xcconfig vor XcodeGen** erstellen — XcodeGen liest xcconfig-Referenzen; falscher Schritt-Order führt zu Build-Fehlern
+
 ## Tech Stack
 
 | Layer | Technologie | Begründung |
