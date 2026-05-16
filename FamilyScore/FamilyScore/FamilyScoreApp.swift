@@ -50,12 +50,8 @@ func verifyAppGroup() {
 
 func verifySupabaseConnection() async {
     do {
-        let families: [AnyJSON] = try await supabase
-            .from("families")
-            .select()
-            .execute()
-            .value
-        print("[DEBUG] Supabase Connection PASS — families returned \(families.count) rows")
+        try await supabase.from("families").select().execute()
+        print("[DEBUG] Supabase Connection PASS")
     } catch {
         print("[DEBUG] Supabase Connection FAIL: \(error)")
     }
