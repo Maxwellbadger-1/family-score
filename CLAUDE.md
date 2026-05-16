@@ -13,6 +13,58 @@ Backend: Supabase (PostgreSQL + Realtime + Auth), Free Tier.
 - `.planning/STATE.md` — aktueller Projektstatus
 - `.planning/research/` — Recherche: Stack, Features, Architektur, Pitfalls
 
+## Windows-Entwicklungsworkflow (CI-First)
+
+Der Entwickler arbeitet **ausschließlich auf Windows 11** — kein lokales Xcode, kein iOS Simulator. Alle Builds und Tests laufen über GitHub Actions auf einem macOS-Runner.
+
+### Lokaler Entwicklungsloop
+
+1. Code schreiben/ändern (Claude Code auf Windows)
+2. `git push origin master` → CI startet automatisch
+3. CI-Status prüfen:
+   ```powershell
+   & "C:\Program Files\GitHub CLI\gh.exe" run list --limit 3
+   ```
+4. Logs bei Fehler:
+   ```powershell
+   & "C:\Program Files\GitHub CLI\gh.exe" run view <ID> --log-failed
+   ```
+5. App-Artifact oder Appetize.io prüfen (s. u.)
+
+> **gh CLI Pfad:** `C:\Program Files\GitHub CLI\gh.exe` — ist NICHT im Standard-PATH, immer absoluten Pfad verwenden.
+
+### Wie wird getestet?
+
+#### Unit Tests → Automatisch via CI
+- Alle `XCTest`-Tests laufen bei jedem Push auf dem macOS-Runner
+- Ergebnis: GitHub Actions → Step "Run Unit Tests"
+- Fehler lesen: `gh run view <ID> --log-failed`
+- Schreibe Tests immer gegen Mocks (kein echter Supabase-Call in Tests!)
+
+#### UI / Funktionstest → Appetize.io
+- CI baut die `.app` und lädt sie auf Appetize.io hoch (falls `APPETIZE_API_TOKEN` Secret gesetzt)
+- Appetize.io simuliert ein iPhone im Browser — kein Mac nötig
+- Für alle sichtbaren Flows testbar: Navigation, Auth-Formulare, Dashboard, Aktivitäts-Logging
+- **Sign in with Apple** ist in Appetize **nicht** vollständig testbar (kein echter Apple-ID-Flow)
+
+#### "Geräte-Checkpoint" in den Phasen = was ist gemeint?
+Jede Phase hat einen "Geräte-Checkpoint" als letzten Plan. Da kein Mac verfügbar ist, gilt folgende Abstufung:
+
+| Was zu testen ist | Wie |
+|---|---|
+| App startet, Navigation, Formulare, Auth-E-Mail | Appetize.io (Browser, kein Gerät nötig) |
+| Supabase-Verbindung, RLS, Datenbank-Writes | Supabase Dashboard + CI Unit Tests |
+| Sign in with Apple (echter Flow) | Sideloadly → physisches iPhone |
+| App Group / Widget-Datenaustausch | Sideloadly → physisches iPhone |
+| Lock Screen Widgets auf Gerät | Sideloadly → physisches iPhone |
+| App Store Submission | GitHub Actions + fastlane (macOS-Runner signiert + uploaded) |
+
+**Sideloading auf Windows (kein Mac nötig):** [Sideloadly](https://sideloadly.io/) installiert die `.ipa` aus den CI-Artifacts direkt aufs iPhone über USB. Mit Apple Developer Account: unbegrenzte Gültigkeit. Mit kostenloser Apple ID: 7 Tage (dann neu installieren).
+
+**App Store ohne Mac:** GitHub Actions (macOS-Runner) + `fastlane match` + `fastlane deliver` — Zertifikate in verschlüsseltem Git-Repo, Upload vollautomatisch aus CI. Kein lokaler Mac benötigt. Setup erfolgt in Phase 6.
+
+---
+
 ## GSD Workflow
 
 Dieses Projekt folgt dem GSD-Workflow:
@@ -22,7 +74,7 @@ Dieses Projekt folgt dem GSD-Workflow:
 3. `/gsd-execute-phase N` — Plan ausführen
 4. `/gsd-verify-work N` — Ergebnisse validieren
 
-**Aktuell:** Phase 1 (Foundation) ist als nächstes dran → `/gsd-discuss-phase 1`
+**Aktuell:** Phase 2 (Authentication) läuft, Plan 02-03 Task 3 wartet auf Appetize.io-Verifikation → nächster Schritt: Appetize.io testen oder Phase 3 starten
 
 ## Kritische Architektur-Regeln
 
@@ -93,9 +145,9 @@ Diese Regeln stammen aus der Recherche und dürfen NICHT gebrochen werden:
 
 | Phase | Status | Kerninhalt |
 |-------|--------|------------|
-| 1. Foundation | Nicht gestartet | Xcode, App Group, Supabase Schema + RLS |
-| 2. Authentication | Nicht gestartet | Email + Sign in with Apple |
-| 3. Family Core | Nicht gestartet | Familiengruppe, Invites, Profile |
-| 4. Activity Logging & Dashboard | Nicht gestartet | Core-Loop, Ringe, Score |
-| 5. Real-time & Widgets | Nicht gestartet | Live-Sync, 5 Widget-Oberflächen |
-| 6. Settings & Polish | Nicht gestartet | Admin-Settings, Kinder-UI, App Store |
+| 1. Foundation | ✅ Abgeschlossen (2026-05-15) | Xcode, App Group, Supabase Schema + RLS |
+| 2. Authentication | 🔄 In Progress (Plan 02-03 Checkpoint) | Email + Sign in with Apple |
+| 3. Family Core | ⏳ Bereit | Familiengruppe, Invites, Profile |
+| 4. Activity Logging & Dashboard | ⏳ Wartet auf Phase 3 | Core-Loop, Ringe, Score |
+| 5. Real-time & Widgets | ⏳ Wartet auf Phase 4 | Live-Sync, 5 Widget-Oberflächen |
+| 6. Settings & Polish | ⏳ Wartet auf Phase 5 | Admin-Settings, Kinder-UI, App Store via fastlane CI |

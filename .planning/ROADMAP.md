@@ -26,11 +26,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Depends on**: Nothing (first phase)
 **Requirements**: *(no user-visible requirements — pure enabling infrastructure)*
 **Success Criteria** (what must be TRUE):
-  1. App builds and runs on a real device (not just Simulator) with the main app target and Widget Extension target both present
-  2. App Group container is verified accessible from both the main app and the Widget Extension on a physical device
-  3. Supabase schema is live with all tables (families, family_members, activity_entries, category_config, family_invites, weekly_summaries) and every table has RLS enabled with real policies — verified by a Swift client call, not the Supabase dashboard
-  4. Secrets.xcconfig is gitignored and the Supabase anon key is absent from every committed file
-  5. FamilyScoreKit local Swift package exists and is linked to the main app target only (widget extension has no Supabase SDK dependency)
+  1. ✅ App builds successfully in CI (GitHub Actions, iOS Simulator) with the main app target and Widget Extension target both present *(Hinweis: "runs on a real device" entfällt — Windows-only, kein Mac verfügbar; CI-Build ist ausreichend für Phase 1)*
+  2. ⚠️ App Group container auf physischem Gerät verifiziert — **ausstehend** (benötigt Sideloading via Sideloadly oder Mac; wird in Phase 5 gemeinsam mit Widget-Tests nachgeholt)
+  3. ✅ Supabase schema is live with all tables (families, family_members, activity_entries, category_config, family_invites, weekly_summaries) and every table has RLS enabled with real policies — verified by a Swift client call, not the Supabase dashboard
+  4. ✅ Secrets.xcconfig is gitignored and the Supabase anon key is absent from every committed file
+  5. ✅ FamilyScoreKit local Swift package exists and is linked to the main app target only (widget extension has no Supabase SDK dependency)
 **Plans**: 3 plans
 Plans:
 - [x] 01-PLAN-01.md — Xcode-Projektstruktur: zwei Targets (App + Widget Extension), App Group Entitlements, xcconfig-Secrets-System
@@ -50,7 +50,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Wave 0: XCTest-Infrastruktur (FamilyScoreTests-Target, AppState.swift, AuthServiceTests-Stubs, MockAuthService + AuthServiceProtocol) *(completed 2026-05-16)*
 - [x] 02-02-PLAN.md — Wave 1: AuthService (ObservableObject, authStateChanges), RootView (AppState-Routing), LoginView + RegisterView + AuthFlowView *(completed 2026-05-16)*
-- [ ] 02-03-PLAN.md — Wave 2: Sign in with Apple (Nonce-Fluss, ASAuthorizationController), FamilyScoreApp.swift Integration, Geraete-Checkpoint *(Tasks 1+2 complete 2026-05-16 — Task 3 checkpoint awaiting device verification)*
+- [ ] 02-03-PLAN.md — Wave 2: Sign in with Apple (Nonce-Fluss, ASAuthorizationController), FamilyScoreApp.swift Integration, Appetize-Checkpoint *(Tasks 1+2 complete 2026-05-16 — Task 3: E-Mail-Auth via Appetize.io verifizieren; Sign-in-with-Apple-Flow nur auf physischem Gerät vollständig testbar)*
 
 ### Phase 3: Family Core
 **Goal**: Users can form or join a family group, see all members, manage roles, and set up child profiles — family isolation enforced by RLS
@@ -67,7 +67,7 @@ Plans:
 - [ ] 03-01-PLAN.md — Wave 0: SQL-Migrationsdatei (child_profiles DDL, 4 SECURITY DEFINER RPCs, RLS-Policies), FamilyService-Test-Infrastruktur (FamilyServiceProtocol, MockFamilyService, 10 Teststubs)
 - [ ] 03-02-PLAN.md — Wave 1: [BLOCKING] supabase db push + FamilyService (ObservableObject, alle RPCs) + AuthService.refreshFamilyStatus()
 - [ ] 03-03-PLAN.md — Wave 2: SwiftUI Family-Views (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView)
-- [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Geraete-Checkpoint (5 Success Criteria)
+- [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Appetize-Checkpoint (5 Success Criteria via Appetize.io; FAM-02 Invite-Flow braucht zwei Appetize-Sessions)
 
 ### Phase 4: Activity Logging & Dashboard
 **Goal**: Family members can log activities and see time and score data for themselves and the whole family — the complete core product loop works end to end
@@ -85,10 +85,11 @@ Plans:
 - [ ] 04-01-PLAN.md — Wave 0: ActivityServiceProtocol + alle Modelle, MockActivityService, XCTest-Stubs (ActivityServiceTests + RingProgressTests), SQL-Migration 20260516_phase4_rpcs.sql (4 RPCs), [BLOCKING] supabase db push
 - [ ] 04-02-PLAN.md — Wave 1: ActivityService (ObservableObject, CRUD + Timer + Optimistic UI + RPC-Calls), ActivityEntry-Stub
 - [ ] 04-03-PLAN.md — Wave 2: Dashboard-UI (SingleRingView, RingClusterView, DashboardView, WeekSummaryView) + ActivityLogSheet
-- [ ] 04-04-PLAN.md — Wave 3: ActivityListView + ActivityRowView, App-Verdrahtung (TabView, @StateObject Injection), Test-Suite gruen, Geraete-Checkpoint
+- [ ] 04-04-PLAN.md — Wave 3: ActivityListView + ActivityRowView, App-Verdrahtung (TabView, @StateObject Injection), Test-Suite gruen, Appetize-Checkpoint
 
 ### Phase 5: Real-time & Widgets
 **Goal**: Activity logged on one device appears on every other family device within seconds; Lock Screen and Home Screen widgets display live data
+**Testing-Hinweis**: Widget-Tests (Lock Screen, App Group) erfordern physisches iPhone — Sideloadly auf Windows installiert die CI-`.ipa` direkt aufs Gerät (kein Mac nötig). App Group SC-2 aus Phase 1 wird hier nachgeholt.
 **Depends on**: Phase 4
 **Requirements**: SYNC-01, SYNC-02, SYNC-03, WIDGET-01, WIDGET-02, WIDGET-03, WIDGET-04, WIDGET-05
 **Success Criteria** (what must be TRUE):
@@ -104,6 +105,7 @@ Plans:
 
 ### Phase 6: Settings & Polish
 **Goal**: Admins can configure the app for their family's needs; child-safe UI modes work correctly; the app is ready for App Store submission
+**App Store Submission ohne Mac**: Vollständig via GitHub Actions + fastlane möglich. Der macOS-Runner signiert die App und lädt sie zu App Store Connect hoch — kein lokaler Mac nötig. Setup: fastlane match (Zertifikate in Git-Repo) + fastlane deliver. Details werden in Phase-6-Plan ausgearbeitet.
 **Depends on**: Phase 5
 **Requirements**: SETTINGS-01, SETTINGS-02, KID-02, KID-03
 **Success Criteria** (what must be TRUE):

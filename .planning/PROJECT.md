@@ -52,6 +52,7 @@ Familienmitglieder sollen auf einen Blick sehen können, ob Pflichten und Freize
 - **Platform**: iOS 16+ (für Lock-Screen-Widgets zwingend)
 - **Qualität**: Kein Feature-Bloat, kein AI-Sloppy-Code — lieber weniger, aber poliert
 - **Entwicklung**: Solo mit Claude Code, kein externes Team
+- **Entwicklungsumgebung**: Windows 11 only — kein Mac, kein lokales Xcode, kein iOS Simulator. Builds und Tests laufen ausschließlich via GitHub Actions (CI-First). UI-Tests via Appetize.io. Physische Geräte-Tests via Sideloadly (Windows → iPhone per USB). App Store Submission via GitHub Actions + fastlane (macOS-Runner, kein lokaler Mac nötig).
 
 ## Key Decisions
 
