@@ -124,6 +124,7 @@ struct LoginView: View {
 
     private func submitLogin() async {
         guard canSubmit else { return }
+        print("[Login] submitLogin() → \(email.trimmingCharacters(in: .whitespaces))")
         isLoading = true
         defer { isLoading = false }
         do {
@@ -131,7 +132,9 @@ struct LoginView: View {
                 email: email.trimmingCharacters(in: .whitespaces),
                 password: password
             )
+            print("[Login] signIn() OK")
         } catch {
+            print("[Login] signIn() Fehler: \(error)")
             authService.authError = authService.localizedError(from: error)
         }
     }

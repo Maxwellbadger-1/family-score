@@ -36,22 +36,22 @@ struct SignInWithAppleView: View {
     // MARK: - Apple Sign In Handler
 
     private func handleAppleSignIn(result: Result<ASAuthorization, Error>) async {
+        print("[Apple] handleAppleSignIn() aufgerufen")
         switch result {
         case .success(let auth):
+            print("[Apple] Credential-Typ: \(type(of: auth.credential))")
             guard
                 let credential = auth.credential as? ASAuthorizationAppleIDCredential,
                 let idTokenData = credential.identityToken,
                 let idToken = String(data: idTokenData, encoding: .utf8)
             else {
-                // identityToken fehlt — sollte bei Apple nie vorkommen
+                print("[Apple] FEHLER: identityToken fehlt oder nicht decodierbar")
                 authService.authError = "Apple-Anmeldung fehlgeschlagen. Bitte erneut versuchen."
                 return
             }
 
+            print("[Apple] idToken erhalten (\(idToken.count) Zeichen), nonce: \(currentNonce.prefix(8))…")
             do {
-                // KRITISCH: currentNonce ist rawNonce (NICHT sha256(currentNonce))
-                // Supabase verifiziert intern: sha256(rawNonce) muss mit Apple-Token-Hash uebereinstimmen
-                // Source: RESEARCH.md Pitfall 3
                 try await supabase.auth.signInWithIdToken(
                     credentials: OpenIDConnectCredentials(
                         provider: .apple,
@@ -59,6 +59,7 @@ struct SignInWithAppleView: View {
                         nonce: currentNonce  // rawNonce! Nicht sha256(currentNonce)!
                     )
                 )
+                print("[Apple] signInWithIdToken() OK")
 
                 // Apple fullName nur beim ERSTEN Login verfuegbar — sofort persistieren!
                 // Source: RESEARCH.md Pitfall 1 — bei zweitem Login ist credential.fullName nil
@@ -69,24 +70,23 @@ struct SignInWithAppleView: View {
                         .compactMap { $0 }
                         .filter { !$0.isEmpty }
                         .joined(separator: " ")
-                    // Fehler hier ist akzeptabel — User ist trotzdem eingeloggt
+                    print("[Apple] fullName persistieren: \(displayName)")
                     try? await supabase.auth.update(
                         user: UserAttributes(data: ["full_name": .string(displayName)])
                     )
                 }
-                // authStateChanges feuert SIGNED_IN → AuthService.startObserving() aktualisiert AppState
 
             } catch {
+                print("[Apple] signInWithIdToken() Fehler: \(error)")
                 authService.authError = authService.localizedError(from: error)
             }
 
         case .failure(let error as ASAuthorizationError) where error.code == .canceled:
-            // User hat Apple-Dialog bewusst abgebrochen — KEIN Fehler anzeigen
-            // Source: RESEARCH.md Pitfall 5
+            print("[Apple] User hat Dialog abgebrochen (kein Fehler)")
             break
 
         case .failure(let error):
-            // Echter Fehler (Netzwerk, ungueltige Credentials etc.)
+            print("[Apple] Fehler: \(error)")
             authService.authError = error.localizedDescription
         }
     }

@@ -145,6 +145,7 @@ struct RegisterView: View {
 
     private func submitRegister() async {
         guard canSubmit else { return }
+        print("[Register] submitRegister() → \(email.trimmingCharacters(in: .whitespaces))")
         isLoading = true
         defer { isLoading = false }
         do {
@@ -153,7 +154,9 @@ struct RegisterView: View {
                 password: password,
                 displayName: displayName.trimmingCharacters(in: .whitespaces)
             )
+            print("[Register] signUp() OK")
         } catch {
+            print("[Register] signUp() Fehler: \(error)")
             authService.authError = authService.localizedError(from: error)
         }
     }

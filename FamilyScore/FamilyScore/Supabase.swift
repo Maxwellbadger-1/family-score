@@ -8,10 +8,17 @@ import Supabase
 private func requireInfoPlistString(_ key: String) -> String {
     guard let value = Bundle.main.object(forInfoDictionaryKey: key) as? String,
           !value.isEmpty else {
+        print("[Supabase] FATAL: '\(key)' fehlt oder ist leer in Info.plist")
+        print("[Supabase] Verfuegbare Info.plist Keys: \(Bundle.main.infoDictionary?.keys.sorted().joined(separator: ", ") ?? "keine")")
         preconditionFailure(
             "'\(key)' fehlt oder ist leer in Info.plist. " +
             "Secrets.xcconfig mit echten Werten befuellen (siehe Secrets.xcconfig.template)."
         )
+    }
+    if key == "SUPABASE_URL" {
+        print("[Supabase] URL: \(value)")
+    } else {
+        print("[Supabase] '\(key)': \(value.count) Zeichen geladen")
     }
     return value
 }

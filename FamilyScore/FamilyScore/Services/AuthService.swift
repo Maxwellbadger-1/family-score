@@ -26,29 +26,31 @@ final class AuthService: ObservableObject {
     /// WICHTIG: startObserving() wird NUR in FamilyScoreApp.swift gestartet (Plan 03 Task 2).
     /// RootView ruft startObserving() NICHT auf — sonst entstehen zwei simultane Schleifen.
     func startObserving() async {
+        print("[Auth] startObserving() gestartet")
         for await (event, session) in await supabase.auth.authStateChanges {
+            print("[Auth] Event: \(event), session: \(session != nil ? "vorhanden" : "nil")")
             switch event {
             case .initialSession, .signedIn:
                 if let session {
                     currentUser = session.user
+                    print("[Auth] Checking family membership fuer user: \(session.user.id)")
                     let hasFamily = await checkFamilyMembership(userId: session.user.id)
+                    print("[Auth] hasFamily: \(hasFamily)")
                     appState = .authenticated(hasFamily: hasFamily)
                 } else {
                     appState = .unauthenticated
                 }
             case .signedOut:
-                // T-2-05: Pitfall 4 (Silent Logout Bug #486) — SIGNED_OUT korrekt abfangen
-                // Falls Refresh-Token-Rotation versagt, landet User sauber auf Login-Screen
                 currentUser = nil
                 appState = .unauthenticated
             case .tokenRefreshed:
-                // Kein UI-State-Change noetig — Token laeuft still im Hintergrund
-                // Pitfall 4: Falls SIGNED_OUT nach Refresh kommt, faengt .signedOut-Case ab
                 break
             default:
                 break
             }
+            print("[Auth] appState jetzt: \(appState)")
         }
+        print("[Auth] startObserving() Stream beendet — unerwartet!")
     }
 
     // MARK: - E-Mail + Passwort
@@ -95,7 +97,7 @@ final class AuthService: ObservableObject {
                 .value
             return result.first?.family_id != nil
         } catch {
-            // DB-Fehler → kein Crash; User landet in OnboardingPlaceholder (Phase 3 repariert)
+            print("[Auth] checkFamilyMembership Fehler: \(error)")
             return false
         }
     }

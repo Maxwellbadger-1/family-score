@@ -11,29 +11,70 @@ struct RootView: View {
     @EnvironmentObject private var authService: AuthService
 
     var body: some View {
-        Group {
-            switch authService.appState {
-            case .loading:
-                // Splash waehrend INITIAL_SESSION-Event aussteht
-                ProgressView()
-                    .tint(.white)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.black)
+        ZStack(alignment: .bottom) {
+            Group {
+                switch authService.appState {
+                case .loading:
+                    ProgressView()
+                        .tint(.white)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.black)
 
-            case .unauthenticated:
-                AuthFlowView()
+                case .unauthenticated:
+                    AuthFlowView()
 
-            case .authenticated(hasFamily: false):
-                // Phase 3 liefert echten Onboarding-Flow (Familiengruppe erstellen/beitreten)
-                OnboardingPlaceholderView()
+                case .authenticated(hasFamily: false):
+                    // Phase 3 liefert echten Onboarding-Flow
+                    OnboardingPlaceholderView()
 
-            case .authenticated(hasFamily: true):
-                // Phase 4 liefert MainTabView (Dashboard, Aktivitaeten, Einstellungen)
-                AuthenticatedPlaceholderView()
+                case .authenticated(hasFamily: true):
+                    // Phase 4 liefert MainTabView
+                    AuthenticatedPlaceholderView()
+                }
             }
+
+            #if DEBUG
+            DebugStateOverlay(appState: authService.appState, error: authService.authError)
+            #endif
         }
     }
 }
+
+// MARK: - Debug Overlay (DEBUG-Builds only, in Appetize sichtbar)
+
+#if DEBUG
+struct DebugStateOverlay: View {
+    let appState: AppState
+    let error: String?
+
+    private var stateLabel: String {
+        switch appState {
+        case .loading:                     return "State: loading"
+        case .unauthenticated:             return "State: unauthenticated"
+        case .authenticated(hasFamily: false): return "State: authenticated (no family)"
+        case .authenticated(hasFamily: true):  return "State: authenticated (has family)"
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(stateLabel)
+            if let error {
+                Text("Error: \(error)")
+                    .foregroundColor(.red)
+            }
+        }
+        .font(.system(size: 11, design: .monospaced))
+        .foregroundColor(.yellow)
+        .padding(6)
+        .background(Color.black.opacity(0.7))
+        .cornerRadius(6)
+        .padding(.bottom, 12)
+        .padding(.horizontal, 12)
+        .allowsHitTesting(false)
+    }
+}
+#endif
 
 // MARK: - Placeholder Views (werden in spaeteren Phasen ersetzt)
 
@@ -92,8 +133,6 @@ struct AuthenticatedPlaceholderView: View {
 }
 
 #Preview {
-    // AuthService ist final — kein Subclassing moeglich.
-    // Direkte Instanz zeigt .loading-State (Default) als Preview.
     RootView()
         .environmentObject(AuthService())
 }
