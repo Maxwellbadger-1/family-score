@@ -5,7 +5,7 @@
 // Threat mitigations: T-2-02 (private(set)), T-2-03 (localizedError), T-2-05 (signedOut handler)
 
 import Foundation
-import Supabase
+@preconcurrency import Supabase
 
 @MainActor
 final class AuthService: ObservableObject {
