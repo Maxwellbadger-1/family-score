@@ -1,0 +1,89 @@
+name: FamilyScore
+options:
+  bundleIdPrefix: com.familyscore
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: "2.46.0"
+  FamilyScoreKit:
+    path: FamilyScoreKit
+
+targets:
+
+  FamilyScore:
+    type: application
+    platform: iOS
+    sources:
+      - path: FamilyScore
+    configFiles:
+      Debug: Config/Config.xcconfig
+      Release: Config/Config.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.familyscore
+        INFOPLIST_FILE: FamilyScore/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: FamilyScore/Resources/FamilyScore.entitlements
+        SWIFT_VERSION: "6.0"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+    dependencies:
+      - package: Supabase
+        product: Supabase
+      - package: FamilyScoreKit
+      - target: FamilyScoreWidgetExtension
+        embed: true
+
+  FamilyScoreWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: FamilyScoreWidgetExtension
+    info:
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.familyscore.widget
+        CODE_SIGN_ENTITLEMENTS: FamilyScoreWidgetExtension/FamilyScoreWidgetExtension.entitlements
+        SWIFT_VERSION: "6.0"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+    dependencies:
+      - package: FamilyScoreKit
+
+  FamilyScoreTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: FamilyScoreTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.familyscore.tests
+        SWIFT_VERSION: "6.0"
+    dependencies:
+      - target: FamilyScore
+
+schemes:
+  FamilyScore:
+    build:
+      targets:
+        FamilyScore: all
+        FamilyScoreTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - FamilyScoreTests
+    archive:
+      config: Release

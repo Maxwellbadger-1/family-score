@@ -21,6 +21,13 @@ Secrets.xcconfig
 .build/
 .swiftpm/
 
+# XcodeGen — .xcodeproj wird in CI generiert, nicht commiten
+*.xcodeproj/
+!*.xcodeproj/project.xcworkspace/
+
+# CI Build-Output
+FamilyScore/build/
+
 # OS
 .DS_Store
 Thumbs.db

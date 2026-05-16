@@ -1,0 +1,154 @@
+name: iOS Build & Preview
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build for Simulator
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          XCODE=$(ls /Applications/ | grep "^Xcode_16" | sort -V | tail -1)
+          sudo xcode-select -s "/Applications/$XCODE/Contents/Developer"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Install xcpretty
+        run: gem install xcpretty --no-document
+
+      - name: Create Secrets.xcconfig (CI-Platzhalter)
+        run: |
+          cat > FamilyScore/Config/Secrets.xcconfig << 'EOF'
+          // CI-Platzhalter — Supabase-Verbindung schlaegt fehl, App baut aber korrekt
+          SUPABASE_URL_SECRET = https://placeholder.supabase.co
+          SUPABASE_KEY_SECRET = placeholder-anon-key
+          EOF
+
+      - name: Generiere Xcode-Projekt
+        working-directory: FamilyScore
+        run: xcodegen generate --spec project.yml
+
+      - name: Loesche SPM Package-Cache (bei Problemen)
+        run: rm -rf ~/Library/Developer/Xcode/DerivedData
+
+      - name: Baue fuer iOS Simulator
+        working-directory: FamilyScore
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project FamilyScore.xcodeproj \
+            -scheme FamilyScore \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            SYMROOT=$(pwd)/build \
+            OBJROOT=$(pwd)/build/obj \
+            | xcpretty
+
+      - name: Lade .app zu Appetize.io hoch
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          APP_PATH=$(find FamilyScore/build -name "FamilyScore.app" \
+            ! -name "*.appex" -type d | head -1)
+          echo "App-Pfad: $APP_PATH"
+
+          cd "$(dirname "$APP_PATH")"
+          zip -r FamilyScore.zip FamilyScore.app
+
+          if [ -z "$APPETIZE_TOKEN" ]; then
+            echo "APPETIZE_API_TOKEN nicht gesetzt — Appetize-Upload übersprungen."
+            echo "Füge APPETIZE_API_TOKEN als GitHub Secret hinzu um den Upload zu aktivieren."
+            exit 0
+          fi
+
+          if [ -n "$APPETIZE_APP_KEY" ]; then
+            echo "Aktualisiere bestehende App auf Appetize..."
+            RESPONSE=$(curl --http1.1 -s \
+              "https://api.appetize.io/v1/apps/$APPETIZE_APP_KEY" \
+              -F "file=@FamilyScore.zip" \
+              -u "$APPETIZE_TOKEN:")
+          else
+            echo "Lade neue App zu Appetize hoch..."
+            RESPONSE=$(curl --http1.1 -s \
+              "https://api.appetize.io/v1/apps" \
+              -F "file=@FamilyScore.zip" \
+              -F "platform=ios" \
+              -u "$APPETIZE_TOKEN:")
+            echo "WICHTIG: Speichere den 'publicKey' aus der Antwort als APPETIZE_APP_KEY Secret!"
+          fi
+
+          echo "Appetize Antwort: $RESPONSE"
+        env:
+          APPETIZE_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+          APPETIZE_APP_KEY: ${{ secrets.APPETIZE_APP_KEY }}
+
+      - name: Speichere .app als Artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: FamilyScore-${{ github.sha }}
+          path: FamilyScore/build/Debug-iphonesimulator/FamilyScore.app
+          retention-days: 7
+
+  test:
+    name: Unit Tests
+    runs-on: macos-15
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          XCODE=$(ls /Applications/ | grep "^Xcode_16" | sort -V | tail -1)
+          sudo xcode-select -s "/Applications/$XCODE/Contents/Developer"
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Install xcpretty
+        run: gem install xcpretty --no-document
+
+      - name: Create Secrets.xcconfig (CI-Platzhalter)
+        run: |
+          cat > FamilyScore/Config/Secrets.xcconfig << 'EOF'
+          SUPABASE_URL_SECRET = https://placeholder.supabase.co
+          SUPABASE_KEY_SECRET = placeholder-anon-key
+          EOF
+
+      - name: Generiere Xcode-Projekt
+        working-directory: FamilyScore
+        run: xcodegen generate --spec project.yml
+
+      - name: Fuehre Tests aus
+        working-directory: FamilyScore
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project FamilyScore.xcodeproj \
+            -scheme FamilyScore \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            SYMROOT=$(pwd)/build \
+            | xcpretty
