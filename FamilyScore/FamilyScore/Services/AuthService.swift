@@ -68,7 +68,7 @@ final class AuthService: ObservableObject {
 
     func signIn(email: String, password: String) async throws {
         authError = nil
-        try await supabase.auth.signInWithPassword(credentials: .init(email: email, password: password))
+        try await supabase.auth.signIn(email: email, password: password)
         // authStateChanges feuert SIGNED_IN
     }
 
