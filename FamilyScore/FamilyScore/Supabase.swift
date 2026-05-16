@@ -2,6 +2,7 @@
 // Target Membership: FamilyScore (App) ONLY — NIEMALS Widget Extension!
 // KeychainLocalStorage: expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
 // Source: github.com/orgs/supabase/discussions/28132 (Pattern 5 aus RESEARCH.md)
+import Foundation
 import Supabase
 
 private func requireInfoPlistString(_ key: String) -> String {
