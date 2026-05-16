@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-05-15)
 
 **Core value:** Familienmitglieder sehen auf einen Blick, ob Pflichten und Freizeit fair aufgeteilt sind — Transparenz schafft Fairness ohne Diskussion
-**Current focus:** Phase 2 — Authentication
+**Current focus:** Phase 2 — Authentication (executing)
 
 ## Current Position
 
 Phase: 2 of 6 (Authentication)
-Plan: 0 of 3 in current phase
-Status: Ready to execute
-Last activity: 2026-05-15 — Phase 1 complete (3/3 plans, Supabase schema live, RLS active, secrets protected)
+Plan: 1 of 3 in current phase
+Status: In Progress (executing)
+Last activity: 2026-05-16 — 02-01 complete (Wave 0: XCTest infrastructure — AppState, MockAuthService, AuthServiceTests)
 
-Progress: [█░░░░░░░░░] 17%
+Progress: [██░░░░░░░░] 22%
 
 ## Performance Metrics
 
@@ -28,9 +28,10 @@ Progress: [█░░░░░░░░░] 17%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 3 | — | — |
+| 2. Authentication | 1 | ~2min | ~2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 01-02, 01-03
+- Last 5 plans: 01-01, 01-02, 01-03, 02-01
 - Trend: —
 
 *Updated after each plan completion*
@@ -46,6 +47,9 @@ Recent decisions affecting current work:
 - Foundation: Supabase SDK must NOT be linked to the Widget Extension target — widget reads only from App Group UserDefaults
 - Foundation: Score is append-only — activity_entries summed server-side via DB trigger into weekly_summaries; no mutable total_score column ever
 - Foundation: Realtime must be disconnected on background and reconnected (with a REST re-fetch first) on every scenePhase .active
+- Auth Wave 0: AppState is final — Plan 02 does NOT modify it; AuthService reads/writes it via authStateChanges
+- Auth Wave 0: AuthServiceProtocol defined in test target MockAuthService.swift; Plan 02 AuthService implicitly conforms
+- Auth Wave 0: FamilyScoreTests Xcode target registration requires Mac (same pattern as Phase 1)
 
 ### Pending Todos
 
@@ -70,6 +74,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-15
-Stopped at: Phase 1 complete — Supabase schema live (6 tables, RLS active), Secrets.xcconfig gitignored, SC-4/SC-5 verified. SC-1/SC-2 require Mac (Xcode build + device test).
+Last session: 2026-05-16
+Stopped at: Phase 2 Plan 01 complete — XCTest Wave 0 infrastructure: AppState.swift, MockAuthService.swift, AuthServiceTests.swift (8 stubs). FamilyScoreTests Xcode target registration requires Mac.
 Resume file: None
