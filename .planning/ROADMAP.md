@@ -125,6 +125,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
 | 3. Family Core | 0/4 | Not started | - |
-| 4. Activity Logging & Dashboard | 0/4 | Not started | - |
+| 4. Activity Logging & Dashboard | 0/4 | Ready to execute | - |
 | 5. Real-time & Widgets | 0/TBD | Not started | - |
 | 6. Settings & Polish | 0/TBD | Not started | - |

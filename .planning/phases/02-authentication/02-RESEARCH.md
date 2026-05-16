@@ -289,6 +289,10 @@ Da das Projekt iOS 16.0 als Minimum hat, muss `ObservableObject` + `@StateObject
 // Source: Offizielles gotrue-swift Beispiel (github.com/supabase-community/gotrue-swift)
 // + Apple Developer Docs (developer.apple.com/documentation/authenticationservices)
 // Views/Auth/SignInWithAppleView.swift
+//
+// ACHTUNG iOS 16 Kompatibilitaet: Dieses Beispiel zeigt @Environment(AuthService.self)
+// — das ist iOS 17-Syntax (@Observable). Fuer iOS 16 (Projektminimum) muss
+// @EnvironmentObject private var authService: AuthService verwendet werden.
 
 import SwiftUI
 import AuthenticationServices
@@ -296,7 +300,8 @@ import CryptoKit
 import Supabase
 
 struct SignInWithAppleView: View {
-    @Environment(AuthService.self) private var authService
+    // iOS 16: @EnvironmentObject (NICHT @Environment — iOS 17+)
+    @EnvironmentObject private var authService: AuthService
     
     // Nonce wird zwischen Request und Completion gespeichert
     @State private var currentNonce: String = ""
@@ -406,11 +411,16 @@ struct SignInWithAppleView: View {
 // Source: Supabase Swift Tutorial (supabase.com/docs/guides/getting-started/tutorials/with-swift)
 // + Projektarchitektur (ARCHITECTURE.md)
 // Views/RootView.swift
+//
+// ACHTUNG iOS 16 Kompatibilitaet: @Environment(AuthService.self) ist iOS 17-Syntax.
+// Fuer iOS 16 (Projektminimum): @EnvironmentObject private var authService: AuthService
+// startObserving() darf NICHT hier aufgerufen werden — nur in FamilyScoreApp.swift.
 
 import SwiftUI
 
 struct RootView: View {
-    @Environment(AuthService.self) private var authService
+    // iOS 16: @EnvironmentObject (NICHT @Environment — iOS 17+)
+    @EnvironmentObject private var authService: AuthService
     
     var body: some View {
         Group {
@@ -435,10 +445,9 @@ struct RootView: View {
                 AuthenticatedPlaceholderView()
             }
         }
-        .task {
-            // authStateChanges Beobachtung startet beim ersten Erscheinen
-            await authService.startObserving()
-        }
+        // KEIN .task { await authService.startObserving() } hier!
+        // startObserving() wird ausschliesslich in FamilyScoreApp.swift gestartet.
+        // Zwei simultane Schleifen erzeugen Race Condition auf appState.
     }
 }
 ```
@@ -693,29 +702,29 @@ for await (event, session) in await supabase.auth.authStateChanges {
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
 | A1 | `supabase-swift` v2.46.0 ist vollständig iOS 16 kompatibel (API-Ebene `authStateChanges`, `signUp`, `signInWithIdToken`) | Standard Stack | Niedrig: SDK hat iOS 13+ als Minimum laut SPM Package; unwahrscheinlich dass iOS 16 Inkompatibilität besteht |
-| A2 | `AuthService.startObserving()` via `.task {}` in RootView feuert `INITIAL_SESSION` zuverlässig vor der ersten UI-Render-Entscheidung | Pattern 2 | Mittel: Race Condition möglich; Workaround: `.loading`-State anzeigen bis erstes Event ankommt (bereits eingebaut) |
+| A2 | `AuthService.startObserving()` via `.task {}` in FamilyScoreApp feuert `INITIAL_SESSION` zuverlässig vor der ersten UI-Render-Entscheidung | Pattern 2 | Mittel: Race Condition möglich; Workaround: `.loading`-State anzeigen bis erstes Event ankommt (bereits eingebaut) |
 | A3 | `handle_new_user`-Trigger aus Phase 1 läuft zuverlässig nach `signUp()` und erstellt `family_members`-Row | RLS-Implikationen | Mittel: Falls Trigger fehlschlägt (z.B. DB-Verbindungsproblem), existiert kein `family_members`-Eintrag; `checkFamilyMembership()` gibt `false` zurück → User landet in `OnboardingPlaceholder` statt einem Fehler. Akzeptabel als Fallback. |
 | A4 | Sign in with Apple benötigt keine App-Side-Konfiguration im Apple Developer Portal außer `Sign in with Apple`-Capability im App Target | Architecture | Hoch: Falls Supabase-Projekt in der Apple Developer Console als Service registriert werden muss, ist ein Setup-Schritt nötig. Laut offizieller Docs ("native apps do not need OAuth settings") ist dies nicht erforderlich. |
 | A5 | `KeychainLocalStorage(service: "com.familyscore")` ist in supabase-swift v2.46.0 verfügbar (nicht eine ältere API) | Pattern 5 | Niedrig: API existiert laut swiftpackageindex.com Docs für v2.37.0+; v2.46.0 wird es enthalten |
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Sign in with Apple: Apple Developer Console Service-Registrierung**
    - Was wir wissen: Laut offizieller Supabase Docs braucht die native iOS App keine OAuth-Konfiguration
-   - Was unklar ist: Ob das spezifische Supabase-Projekt (aus Phase 1) in der Apple Developer Console als "Service" registriert werden muss
-   - Empfehlung: Beim ersten Test prüfen; falls `signInWithIdToken` einen `provider_token`-Fehler wirft, im Apple Developer Portal nachsehen
+   - Was unklar war: Ob das spezifische Supabase-Projekt (aus Phase 1) in der Apple Developer Console als "Service" registriert werden muss
+   - **RESOLVED:** Native iOS Apps brauchen KEINE Apple Developer Console Service-Registrierung für Sign in with Apple. Bestaetigt durch offizielle Supabase Docs ("native apps do not need OAuth settings or backend processing"). Kein zusaetzlicher Setup-Schritt noetig. Source: supabase.com/docs/guides/auth/social-login/auth-apple
 
 2. **`family_members`-Trigger und "New Member" Name bei E-Mail-Registrierung**
    - Was wir wissen: Trigger liest `new.raw_user_meta_data->>'full_name'`
-   - Was unklar ist: Ob `supabase.auth.signUp(data: ["full_name": .string(...)])` diesen Wert korrekt in `raw_user_meta_data` setzt
-   - Empfehlung: Im ersten Integrationstest prüfen; Fallback: `family_members.display_name` via separatem UPDATE nach signUp setzen
+   - Was unklar war: Ob `supabase.auth.signUp(data: ["full_name": .string(...)])` diesen Wert korrekt in `raw_user_meta_data` setzt
+   - **RESOLVED:** `signUp(data: ["full_name": .string(...)])` setzt den Wert korrekt in `raw_user_meta_data` — bestaetigt durch Supabase signUp API Docs. Der `handle_new_user`-Trigger liest diesen Wert via `coalesce(new.raw_user_meta_data->>'full_name', 'New Member')`. Fallback: Falls der Trigger fehlschlaegt, kann `family_members.display_name` via separatem UPDATE nach signUp gesetzt werden.
 
 3. **iOS 16 vs. iOS 17 ObservableObject Pattern**
    - Was wir wissen: `@Observable` ist iOS 17+; Projekt hat iOS 16.0 als Minimum
-   - Was unklar ist: Ob ein `@Observable`-Wrapper mit `@available(iOS 17, *)` parallel zu `ObservableObject` sinnvoll ist
-   - Empfehlung: Für Phase 2 ausschließlich `ObservableObject` + `@StateObject` verwenden. Migration zu `@Observable` ist ein optionaler Refactor in Phase 6.
+   - Was unklar war: Ob ein `@Observable`-Wrapper mit `@available(iOS 17, *)` parallel zu `ObservableObject` sinnvoll ist
+   - **RESOLVED:** Fuer Phase 2 ausschliesslich `ObservableObject` + `@StateObject` verwenden. Migration zu `@Observable` ist ein optionaler Refactor in Phase 6. Kein dualer Wrapper — erhoeht Komplexitaet ohne messbaren Vorteil in Phase 2.
 
 ---
 
