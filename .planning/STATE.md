@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 2 of 6 (Authentication)
-Plan: 2 of 3 in current phase
-Status: In Progress (executing)
-Last activity: 2026-05-16 — 02-02 complete (Wave 1: AuthService ObservableObject + authStateChanges loop + RootView + Auth Views)
+Plan: 3 of 3 in current phase (checkpoint — awaiting human verification)
+Status: In Progress (checkpoint: human-verify)
+Last activity: 2026-05-16 — 02-03 Tasks 1+2 complete (SignInWithAppleView Nonce-Fluss + FamilyScoreApp.swift @StateObject wiring)
 
 Progress: [███░░░░░░░] 28%
 
@@ -53,6 +53,9 @@ Recent decisions affecting current work:
 - Auth Wave 1: AuthService.startObserving() is NOT called in RootView — only FamilyScoreApp.swift (Plan 02-03) starts the loop to prevent two concurrent AsyncStream loops causing race conditions
 - Auth Wave 1: ObservableObject + @Published used throughout Views and AuthService (NOT @Observable) — iOS 16.0 minimum enforced
 - Auth Wave 1: KeychainLocalStorage(service: com.familyscore) added to Supabase.swift to prevent macOS/iOS Keychain prompt bug (Discussion #28132)
+- Auth Wave 2: rawNonce an Supabase signInWithIdToken, sha256(rawNonce) an Apple request.nonce — NIEMALS vertauschen (Pitfall 3 mitigiert)
+- Auth Wave 2: .task{} auf WindowGroup-Level in FamilyScoreApp.swift garantiert INITIAL_SESSION nie verpasst wird (Pitfall 2 mitigiert)
+- Auth Wave 2: Sign in with Apple Capability muss manuell in Xcode aktiviert werden (Signing & Capabilities → + Capability → Sign in with Apple)
 
 ### Pending Todos
 
@@ -78,5 +81,5 @@ Items acknowledged and carried forward:
 ## Session Continuity
 
 Last session: 2026-05-16
-Stopped at: Phase 2 Plan 02 complete — AuthService (ObservableObject + authStateChanges loop), Supabase.swift (KeychainLocalStorage), RootView, AuthFlowView, LoginView, RegisterView. Build verification requires Mac. Next: Plan 02-03 (Sign in with Apple + FamilyScoreApp.swift wiring).
+Stopped at: Phase 2 Plan 03 Tasks 1+2 complete — SignInWithAppleView (vollstaendiger Nonce-Fluss), LoginView (Apple-Button integriert), FamilyScoreApp.swift (@StateObject AuthService + RootView + .task). Task 3 Checkpoint wartet auf manuelle Verifikation auf echtem iOS-Geraet (AUTH-02: Sign in with Apple, AUTH-03: Session-Persistenz). Voraussetzung: "Sign in with Apple" Capability in Xcode aktivieren (Signing & Capabilities → + Capability). Resume-Signal: "AUTH verifiziert".
 Resume file: None
