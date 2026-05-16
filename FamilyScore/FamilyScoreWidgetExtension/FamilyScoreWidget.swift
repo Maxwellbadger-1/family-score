@@ -41,8 +41,12 @@ struct FamilyScoreWidget: Widget {
     let kind: String = "FamilyScoreWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: FamilyScoreProvider()) { entry in
-            FamilyScoreWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+            if #available(iOS 17, *) {
+                FamilyScoreWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                FamilyScoreWidgetEntryView(entry: entry)
+            }
         }
         .configurationDisplayName("Family Score")
         .description("Zeigt den Familien-Score.")
