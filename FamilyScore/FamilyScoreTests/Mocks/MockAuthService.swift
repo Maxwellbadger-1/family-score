@@ -9,6 +9,7 @@ import Combine
 // Protocol definiert den Vertrag — AuthService (Wave 1) muss diesen erfullen
 // MockAuthService implementiert ihn fuer Tests
 
+@MainActor
 protocol AuthServiceProtocol: AnyObject {
     var appState: AppState { get }
     var authError: String? { get set }
