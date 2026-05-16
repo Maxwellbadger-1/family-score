@@ -25,28 +25,8 @@ jobs:
           sudo xcode-select -s "/Applications/$XCODE/Contents/Developer"
           xcodebuild -version
 
-      # XcodeGen via Homebrew — Cache vermeidet brew install bei jedem Run (~60s)
-      - name: Cache Homebrew XcodeGen
-        uses: actions/cache@v4
-        id: cache-xcodegen
-        with:
-          path: /usr/local/Cellar/xcodegen
-          key: ${{ runner.os }}-xcodegen-2.42
-
       - name: Install XcodeGen
-        if: steps.cache-xcodegen.outputs.cache-hit != 'true'
         run: brew install xcodegen
-
-      - name: Link XcodeGen (nach Cache-Restore)
-        if: steps.cache-xcodegen.outputs.cache-hit == 'true'
-        run: brew link xcodegen || true
-
-      # xcpretty via gem — gecacht
-      - name: Cache Ruby gems
-        uses: actions/cache@v4
-        with:
-          path: ~/.gem
-          key: ${{ runner.os }}-gems-xcpretty-0.3
 
       - name: Install xcpretty
         run: gem list xcpretty --installed --quiet || gem install xcpretty --no-document
