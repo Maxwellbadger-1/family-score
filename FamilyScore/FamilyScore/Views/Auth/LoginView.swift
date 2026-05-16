@@ -104,6 +104,21 @@ struct LoginView: View {
             .disabled(!canSubmit || isLoading)
             .padding(.horizontal, 24)
             .padding(.top, 8)
+
+            // Trennlinie "oder"
+            HStack {
+                VStack { Divider().background(Color.secondary) }
+                Text("oder")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 8)
+                VStack { Divider().background(Color.secondary) }
+            }
+            .padding(.horizontal, 24)
+
+            // Sign in with Apple
+            SignInWithAppleView()
+                .padding(.horizontal, 24)
         }
     }
 

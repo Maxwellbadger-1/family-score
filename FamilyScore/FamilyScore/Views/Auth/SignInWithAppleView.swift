@@ -1,0 +1,112 @@
+// FamilyScore/Views/Auth/SignInWithAppleView.swift
+// Target Membership: FamilyScore (App) ONLY
+// Source: offizielles gotrue-swift Beispiel + Supabase Docs "Sign in with Apple (native)"
+// KRITISCH: rawNonce an Supabase, sha256(rawNonce) an Apple — NIEMALS vertauschen
+// iOS 16 Minimum: @EnvironmentObject verwenden, NICHT @Environment (iOS 17+)
+
+import SwiftUI
+import AuthenticationServices
+import CryptoKit
+import Supabase
+
+struct SignInWithAppleView: View {
+    @EnvironmentObject private var authService: AuthService
+
+    // rawNonce wird zwischen Request (requestedNonce) und Completion (handleAppleSignIn) gespeichert
+    @State private var currentNonce: String = ""
+
+    var body: some View {
+        SignInWithAppleButton(.signIn) { request in
+            // Neuen rawNonce generieren fuer diese spezifische Anfrage
+            let nonce = randomNonce()
+            currentNonce = nonce
+            request.requestedScopes = [.fullName, .email]
+            // Apple erhaelt SHA256-Hash — rawNonce bleibt im App-Memory fuer Supabase
+            request.nonce = sha256(nonce)
+        } onCompletion: { result in
+            Task {
+                await handleAppleSignIn(result: result)
+            }
+        }
+        .signInWithAppleButtonStyle(.white)
+        .frame(height: 50)
+        .cornerRadius(12)
+    }
+
+    // MARK: - Apple Sign In Handler
+
+    private func handleAppleSignIn(result: Result<ASAuthorization, Error>) async {
+        switch result {
+        case .success(let auth):
+            guard
+                let credential = auth.credential as? ASAuthorizationAppleIDCredential,
+                let idTokenData = credential.identityToken,
+                let idToken = String(data: idTokenData, encoding: .utf8)
+            else {
+                // identityToken fehlt — sollte bei Apple nie vorkommen
+                authService.authError = "Apple-Anmeldung fehlgeschlagen. Bitte erneut versuchen."
+                return
+            }
+
+            do {
+                // KRITISCH: currentNonce ist rawNonce (NICHT sha256(currentNonce))
+                // Supabase verifiziert intern: sha256(rawNonce) muss mit Apple-Token-Hash uebereinstimmen
+                // Source: RESEARCH.md Pitfall 3
+                try await supabase.auth.signInWithIdToken(
+                    credentials: OpenIDConnectCredentials(
+                        provider: .apple,
+                        idToken: idToken,
+                        nonce: currentNonce  // rawNonce! Nicht sha256(currentNonce)!
+                    )
+                )
+
+                // Apple fullName nur beim ERSTEN Login verfuegbar — sofort persistieren!
+                // Source: RESEARCH.md Pitfall 1 — bei zweitem Login ist credential.fullName nil
+                if let fullName = credential.fullName,
+                   let givenName = fullName.givenName,
+                   !givenName.isEmpty {
+                    let displayName = [givenName, fullName.familyName]
+                        .compactMap { $0 }
+                        .filter { !$0.isEmpty }
+                        .joined(separator: " ")
+                    // Fehler hier ist akzeptabel — User ist trotzdem eingeloggt
+                    try? await supabase.auth.update(
+                        user: UserAttributes(data: ["full_name": .string(displayName)])
+                    )
+                }
+                // authStateChanges feuert SIGNED_IN → AuthService.startObserving() aktualisiert AppState
+
+            } catch {
+                authService.authError = authService.localizedError(from: error)
+            }
+
+        case .failure(let error as ASAuthorizationError) where error.code == .canceled:
+            // User hat Apple-Dialog bewusst abgebrochen — KEIN Fehler anzeigen
+            // Source: RESEARCH.md Pitfall 5
+            break
+
+        case .failure(let error):
+            // Echter Fehler (Netzwerk, ungueltige Credentials etc.)
+            authService.authError = error.localizedDescription
+        }
+    }
+
+    // MARK: - Kryptographische Nonce-Helpers
+    // Source: offizielles gotrue-swift Beispiel (github.com/supabase-community/gotrue-swift)
+
+    private func randomNonce(length: Int = 32) -> String {
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            // SecRandomCopyBytes-Fehler ist ein Systemfehler — fatalError ist hier korrekt
+            fatalError("Nonce-Generierung fehlgeschlagen: SecRandomCopyBytes Fehler \(errorCode)")
+        }
+        let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        return String(randomBytes.map { charset[Int($0) % charset.count] })
+    }
+
+    private func sha256(_ input: String) -> String {
+        let hashedData = SHA256.hash(data: Data(input.utf8))
+        return hashedData.compactMap { String(format: "%02x", $0) }.joined()
+    }
+}
