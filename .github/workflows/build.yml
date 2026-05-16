@@ -123,6 +123,8 @@ jobs:
           echo "App-Pfad: $APP_PATH"
 
           cd "$(dirname "$APP_PATH")"
+          # Widget Extension entfernen — Appetize unterstuetzt eingebettete Extensions nicht zuverlaessig
+          rm -rf FamilyScore.app/PlugIns
           zip -r FamilyScore.zip FamilyScore.app
 
           if [ -z "$APPETIZE_TOKEN" ]; then
