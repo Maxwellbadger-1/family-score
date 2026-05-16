@@ -14,13 +14,11 @@ final class AuthServiceTests: XCTestCase {
     var mock: MockAuthService!
 
     override func setUp() async throws {
-        try await super.setUp()
         mock = MockAuthService(initialState: .unauthenticated)
     }
 
     override func tearDown() async throws {
         mock = nil
-        try await super.tearDown()
     }
 
     // AUTH-01: signUp setzt appState auf authenticated(hasFamily: false)
