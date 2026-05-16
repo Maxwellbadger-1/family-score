@@ -80,8 +80,12 @@ Plans:
   4. Home screen shows personal Apple Health-style rings (Duty, Leisure, Score) that reflect today's logged activities
   5. Family comparison view shows all members side-by-side with today's duty hours, leisure hours, and score — derived from activity_entries via server-side aggregation, never a mutable total column
   6. Week summary view shows each member's totals for the current week and names the weekly leader
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 4 plans
+Plans:
+- [ ] 04-01-PLAN.md — Wave 0: ActivityServiceProtocol + alle Modelle, MockActivityService, XCTest-Stubs (ActivityServiceTests + RingProgressTests), SQL-Migration 20260516_phase4_rpcs.sql (4 RPCs), [BLOCKING] supabase db push
+- [ ] 04-02-PLAN.md — Wave 1: ActivityService (ObservableObject, CRUD + Timer + Optimistic UI + RPC-Calls), ActivityEntry-Stub
+- [ ] 04-03-PLAN.md — Wave 2: Dashboard-UI (SingleRingView, RingClusterView, DashboardView, WeekSummaryView) + ActivityLogSheet
+- [ ] 04-04-PLAN.md — Wave 3: ActivityListView + ActivityRowView, App-Verdrahtung (TabView, @StateObject Injection), Test-Suite gruen, Geraete-Checkpoint
 
 ### Phase 5: Real-time & Widgets
 **Goal**: Activity logged on one device appears on every other family device within seconds; Lock Screen and Home Screen widgets display live data
@@ -121,6 +125,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
 | 3. Family Core | 0/4 | Not started | - |
-| 4. Activity Logging & Dashboard | 0/TBD | Not started | - |
+| 4. Activity Logging & Dashboard | 0/4 | Not started | - |
 | 5. Real-time & Widgets | 0/TBD | Not started | - |
 | 6. Settings & Polish | 0/TBD | Not started | - |
