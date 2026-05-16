@@ -1,5 +1,7 @@
 // FamilyScore/Supabase.swift
 // Target Membership: FamilyScore (App) ONLY — NIEMALS Widget Extension!
+// KeychainLocalStorage: expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
+// Source: github.com/orgs/supabase/discussions/28132 (Pattern 5 aus RESEARCH.md)
 import Supabase
 
 private func requireInfoPlistString(_ key: String) -> String {
@@ -15,5 +17,12 @@ private func requireInfoPlistString(_ key: String) -> String {
 
 let supabase = SupabaseClient(
     supabaseURL: URL(string: requireInfoPlistString("SUPABASE_URL"))!,
-    supabaseKey: requireInfoPlistString("SUPABASE_KEY")
+    supabaseKey: requireInfoPlistString("SUPABASE_KEY"),
+    options: SupabaseClientOptions(
+        auth: SupabaseClientOptions.AuthOptions(
+            storage: KeychainLocalStorage(service: "com.familyscore")
+            // Expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
+            // Source: github.com/orgs/supabase/discussions/28132
+        )
+    )
 )
