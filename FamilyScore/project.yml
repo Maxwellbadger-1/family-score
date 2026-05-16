@@ -47,6 +47,7 @@ targets:
     sources:
       - path: FamilyScoreWidgetExtension
     info:
+      path: FamilyScoreWidgetExtension/Info.plist
       properties:
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
