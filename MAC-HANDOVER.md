@@ -22,18 +22,17 @@ git pull origin master
 
 ## 2. Secrets.xcconfig anlegen (EINMALIG — nicht in Git)
 
-Diese Datei existiert nur lokal und muss manuell erstellt werden:
+Direkt im Terminal ausführen (erstellt die Datei automatisch):
 
-**Datei:** `FamilyScore/Config/Secrets.xcconfig`
-
-```
+```bash
+cat > FamilyScore/Config/Secrets.xcconfig << 'EOF'
 // Secrets.xcconfig — NICHT in Git einchecken (steht in .gitignore)
 SUPABASE_URL_SECRET = https://amotertwccevkfowxvtk.supabase.co
-SUPABASE_KEY_SECRET = DEIN_SUPABASE_ANON_KEY_HIER
+SUPABASE_KEY_SECRET = sb_publishable_Z4uMbNC964CEUoEy14LEIQ_FW1yB9ca
+EOF
 ```
 
-Den Anon Key findest du im Supabase Dashboard unter:  
-**Project Settings → API → Project API Keys → anon / public**
+⚠️ **Diese Zeilen nach dem Setup aus dieser Datei löschen.**
 
 ---
 
