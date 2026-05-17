@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: in_progress
 stopped_at: ~
-last_updated: "2026-05-17T11:07:00.000Z"
-last_activity: 2026-05-17 — Phase 3 Plan 01 (Wave 0) abgeschlossen — SQL-Migration + Test-Infrastruktur erstellt
+last_updated: "2026-05-17T08:25:00.000Z"
+last_activity: 2026-05-17 — Phase 3 Plan 02 (Wave 1) abgeschlossen — FamilyService + AuthService.refreshFamilyStatus() implementiert
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 11
-  completed_plans: 7
-  percent: 64
+  completed_plans: 8
+  percent: 73
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 3 of 6 (Family Core)
-Plan: 2 of 4 in current phase (Wave 1 — bereit)
+Plan: 3 of 4 in current phase (Wave 2 — Views bereit)
 Status: In Progress
-Last activity: 2026-05-17 — Plan 03-01 (Wave 0) abgeschlossen; SQL-Migration + FamilyServiceProtocol + MockFamilyService + 10 Teststubs erstellt
+Last activity: 2026-05-17 — Plan 03-02 (Wave 1) abgeschlossen; FamilyService (ObservableObject, alle 10 Protocol-Methoden, 4 RPCs) + AuthService.refreshFamilyStatus() implementiert
 
 Progress: [██████░░░░] 64%
 
@@ -77,6 +77,9 @@ Recent decisions affecting current work:
 - Family Wave 0: FamilyServiceProtocol im Test-Target definiert (gleiche Entscheidung wie AuthServiceProtocol Phase 2)
 - Family Wave 0: MemberRole als eigenstaendige Datei (nicht inline in FamilyService) — saubere Imports in Tests und Views
 - Family Wave 0: SQL-Migration noch NICHT zur Datenbank gepusht — das ist Plan 02 Aufgabe (Supabase CLI push)
+- Family Wave 1: FamilyService implementiert FamilyServiceProtocol strukturell (Duck-Typing) — Protocol im Test-Target, keine explizite Konformanz-Deklaration noetig
+- Family Wave 1: updateProfile() verwendet direktes REST-UPDATE (nicht RPC) — RLS-Policy sichert display_name/avatar_color-Only ab; role/family_id unveraenderbar via diesem Pfad
+- Family Wave 1: refreshFamilyStatus() in AuthService (nicht FamilyService) — Dependency-Richtung Views -> Services eingehalten
 
 ### Pending Todos
 
@@ -101,6 +104,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-17T11:07:00.000Z
-Stopped at: Completed 03-01-PLAN.md (Wave 0 abgeschlossen)
+Last session: 2026-05-17T08:25:00.000Z
+Stopped at: Completed 03-02-PLAN.md (Wave 1 abgeschlossen)
 Resume file: None
