@@ -24,8 +24,8 @@ struct RootView: View {
                     AuthFlowView()
 
                 case .authenticated(hasFamily: false):
-                    // Phase 3 liefert echten Onboarding-Flow
-                    OnboardingPlaceholderView()
+                    // Phase 3: Echter Onboarding-Flow (Familie erstellen oder beitreten)
+                    FamilyOnboardingView()
 
                 case .authenticated(hasFamily: true):
                     // Phase 4 liefert MainTabView
@@ -108,25 +108,32 @@ struct OnboardingPlaceholderView: View {
 
 struct AuthenticatedPlaceholderView: View {
     @EnvironmentObject private var authService: AuthService
+    @EnvironmentObject private var familyService: FamilyService
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            VStack(spacing: 16) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 48))
-                    .foregroundColor(.green)
-                Text("Eingeloggt!")
-                    .font(.title.bold())
-                    .foregroundColor(.white)
-                Text("Dashboard kommt in Phase 4.")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                Button("Ausloggen") {
-                    Task { try? await authService.signOut() }
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                VStack(spacing: 16) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundColor(.green)
+                    Text("Eingeloggt!")
+                        .font(.title.bold())
+                        .foregroundColor(.white)
+                    Text("Dashboard kommt in Phase 4.")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                    NavigationLink(destination: MemberListView()) {
+                        Text("Familie verwalten")
+                    }
+                    .padding(.top, 16)
+                    Button("Ausloggen") {
+                        Task { try? await authService.signOut() }
+                    }
+                    .foregroundColor(.red)
+                    .padding(.top, 32)
                 }
-                .foregroundColor(.red)
-                .padding(.top, 32)
             }
         }
     }
