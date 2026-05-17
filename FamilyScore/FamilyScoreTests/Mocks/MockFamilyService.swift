@@ -116,8 +116,8 @@ final class MockFamilyService: ObservableObject, FamilyServiceProtocol {
 
     func changeMemberRole(memberId: UUID, role: MemberRole) async throws {
         changeMemberRoleCallCount += 1
-        lastChangedRole = role
         if shouldThrowOnChangeMemberRole { throw MockFamilyError.insufficientPermissions }
+        lastChangedRole = role
     }
 
     func updateProfile(displayName: String, avatarColor: String) async throws {
