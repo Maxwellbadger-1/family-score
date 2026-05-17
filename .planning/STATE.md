@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 status: in_progress
 stopped_at: ~
-last_updated: "2026-05-17T13:00:00.000Z"
-last_activity: 2026-05-17 — Phase 3 Plan 04 Tasks 1+2 abgeschlossen — App-Verdrahtung (RootView + FamilyScoreApp); Task 3 Checkpoint ausstehend
+last_updated: "2026-05-17T14:00:00.000Z"
+last_activity: 2026-05-17 — Phase 6 geplant — 4 Pläne (Settings & Polish, App Store), Verifikation bestanden
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 11
+  total_plans: 15
   completed_plans: 9
   percent: 75
 ---
