@@ -14,6 +14,7 @@ struct RegisterView: View {
     @State private var password: String = ""
     @State private var passwordConfirm: String = ""
     @State private var isLoading: Bool = false
+    @State private var registrationSuccess: Bool = false
     @FocusState private var focusedField: Field?
 
     enum Field { case name, email, password, passwordConfirm }
@@ -28,6 +29,16 @@ struct RegisterView: View {
     }
 
     var body: some View {
+        if registrationSuccess {
+            EmailConfirmationView(email: email) {
+                registrationSuccess = false
+            }
+        } else {
+            registrationForm
+        }
+    }
+
+    private var registrationForm: some View {
         VStack(spacing: 16) {
             // Fehler-Banner
             if let error = authService.authError {
@@ -155,9 +166,53 @@ struct RegisterView: View {
                 displayName: displayName.trimmingCharacters(in: .whitespaces)
             )
             print("[Register] signUp() OK")
+            registrationSuccess = true
         } catch {
             print("[Register] signUp() Fehler: \(error)")
             authService.authError = authService.localizedError(from: error)
+        }
+    }
+}
+
+// MARK: - E-Mail-Bestätigung
+
+struct EmailConfirmationView: View {
+    let email: String
+    let onBack: () -> Void
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            Image(systemName: "envelope.badge.fill")
+                .font(.system(size: 64))
+                .foregroundStyle(.white, .blue)
+
+            VStack(spacing: 8) {
+                Text("Fast geschafft!")
+                    .font(.title2.bold())
+                    .foregroundColor(.white)
+                Text("Wir haben eine Bestätigungsmail an")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                Text(email)
+                    .font(.body.bold())
+                    .foregroundColor(.white)
+                Text("gesendet. Öffne den Link um dich einzuloggen.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, 32)
+
+            Spacer()
+
+            Button(action: onBack) {
+                Text("Zurück zur Anmeldung")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.bottom, 24)
         }
     }
 }
