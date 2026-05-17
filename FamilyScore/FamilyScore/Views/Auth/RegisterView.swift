@@ -47,38 +47,42 @@ struct RegisterView: View {
                         .foregroundColor(.red)
                     Text(error)
                         .font(.subheadline)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color(white: 0.9))
                     Spacer()
                     Button { authService.authError = nil } label: {
-                        Image(systemName: "xmark").foregroundColor(.secondary)
+                        Image(systemName: "xmark").foregroundColor(Color(white: 0.6))
                     }
                 }
                 .padding(12)
-                .background(Color.red.opacity(0.1))
+                .background(Color.red.opacity(0.15))
                 .cornerRadius(8)
                 .padding(.horizontal, 24)
             }
 
             // Name
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Dein Name")
-                    .font(.caption).foregroundColor(.secondary)
+                    .font(.caption).foregroundColor(Color(white: 0.65))
                 TextField("", text: $displayName)
                     .textContentType(.name)
                     .focused($focusedField, equals: .name)
                     .submitLabel(.next)
                     .onSubmit { focusedField = .email }
                     .padding(12)
-                    .background(Color.white.opacity(0.08))
+                    .background(Color.white.opacity(0.11))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .name ? Color.white.opacity(0.45) : Color.white.opacity(0.18), lineWidth: 1)
+                    )
             }
             .padding(.horizontal, 24)
 
             // E-Mail
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("E-Mail")
-                    .font(.caption).foregroundColor(.secondary)
+                    .font(.caption).foregroundColor(Color(white: 0.65))
                 TextField("", text: $email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
@@ -88,45 +92,61 @@ struct RegisterView: View {
                     .submitLabel(.next)
                     .onSubmit { focusedField = .password }
                     .padding(12)
-                    .background(Color.white.opacity(0.08))
+                    .background(Color.white.opacity(0.11))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .email ? Color.white.opacity(0.45) : Color.white.opacity(0.18), lineWidth: 1)
+                    )
             }
             .padding(.horizontal, 24)
 
             // Passwort
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Passwort (min. 6 Zeichen)")
-                    .font(.caption).foregroundColor(.secondary)
+                    .font(.caption).foregroundColor(Color(white: 0.65))
                 SecureField("", text: $password)
                     .textContentType(.newPassword)
                     .focused($focusedField, equals: .password)
                     .submitLabel(.next)
                     .onSubmit { focusedField = .passwordConfirm }
                     .padding(12)
-                    .background(Color.white.opacity(0.08))
+                    .background(Color.white.opacity(0.11))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .password ? Color.white.opacity(0.45) : Color.white.opacity(0.18), lineWidth: 1)
+                    )
             }
             .padding(.horizontal, 24)
 
             // Passwort bestaetigen
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Passwort bestaetigen")
-                    .font(.caption).foregroundColor(.secondary)
+                    .font(.caption).foregroundColor(Color(white: 0.65))
                 SecureField("", text: $passwordConfirm)
                     .textContentType(.newPassword)
                     .focused($focusedField, equals: .passwordConfirm)
                     .submitLabel(.go)
                     .onSubmit { if canSubmit { Task { await submitRegister() } } }
                     .padding(12)
-                    .background(passwordsMatch ? Color.white.opacity(0.08) : Color.red.opacity(0.15))
+                    .background(passwordsMatch ? Color.white.opacity(0.11) : Color.red.opacity(0.18))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(
+                                !passwordsMatch ? Color.red.opacity(0.6) :
+                                focusedField == .passwordConfirm ? Color.white.opacity(0.45) : Color.white.opacity(0.18),
+                                lineWidth: 1
+                            )
+                    )
                 if !passwordsMatch {
                     Text("Passwoerter stimmen nicht ueberein")
                         .font(.caption2)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color.red.opacity(0.85))
                 }
             }
             .padding(.horizontal, 24)
@@ -144,8 +164,8 @@ struct RegisterView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(canSubmit ? Color.white : Color.white.opacity(0.3))
-                .foregroundColor(.black)
+                .background(canSubmit ? Color.white : Color.white.opacity(0.25))
+                .foregroundColor(canSubmit ? .black : Color(white: 0.5))
                 .cornerRadius(12)
             }
             .disabled(!canSubmit || isLoading)
@@ -194,13 +214,13 @@ struct EmailConfirmationView: View {
                     .foregroundColor(.white)
                 Text("Wir haben eine Bestätigungsmail an")
                     .font(.body)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color(white: 0.65))
                 Text(email)
                     .font(.body.bold())
                     .foregroundColor(.white)
                 Text("gesendet. Öffne den Link um dich einzuloggen.")
                     .font(.body)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color(white: 0.65))
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 32)
@@ -210,7 +230,7 @@ struct EmailConfirmationView: View {
             Button(action: onBack) {
                 Text("Zurück zur Anmeldung")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color(white: 0.55))
             }
             .padding(.bottom, 24)
         }
@@ -219,7 +239,7 @@ struct EmailConfirmationView: View {
 
 #Preview {
     ZStack {
-        Color.black.ignoresSafeArea()
+        Color(white: 0.07).ignoresSafeArea()
         RegisterView()
             .environmentObject(AuthService())
     }

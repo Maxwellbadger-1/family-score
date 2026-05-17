@@ -30,26 +30,26 @@ struct LoginView: View {
                         .foregroundColor(.red)
                     Text(error)
                         .font(.subheadline)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color(white: 0.9))
                     Spacer()
                     Button {
                         authService.authError = nil
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color(white: 0.6))
                     }
                 }
                 .padding(12)
-                .background(Color.red.opacity(0.1))
+                .background(Color.red.opacity(0.15))
                 .cornerRadius(8)
                 .padding(.horizontal, 24)
             }
 
             // E-Mail Feld
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("E-Mail")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color(white: 0.65))
                 TextField("", text: $email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
@@ -59,26 +59,34 @@ struct LoginView: View {
                     .submitLabel(.next)
                     .onSubmit { focusedField = .password }
                     .padding(12)
-                    .background(Color.white.opacity(0.08))
+                    .background(Color.white.opacity(0.11))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .email ? Color.white.opacity(0.45) : Color.white.opacity(0.18), lineWidth: 1)
+                    )
             }
             .padding(.horizontal, 24)
 
             // Passwort Feld
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Passwort")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color(white: 0.65))
                 SecureField("", text: $password)
                     .textContentType(.password)
                     .focused($focusedField, equals: .password)
                     .submitLabel(.go)
                     .onSubmit { if canSubmit { Task { await submitLogin() } } }
                     .padding(12)
-                    .background(Color.white.opacity(0.08))
+                    .background(Color.white.opacity(0.11))
                     .cornerRadius(8)
                     .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .password ? Color.white.opacity(0.45) : Color.white.opacity(0.18), lineWidth: 1)
+                    )
             }
             .padding(.horizontal, 24)
 
@@ -97,8 +105,8 @@ struct LoginView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(canSubmit ? Color.white : Color.white.opacity(0.3))
-                .foregroundColor(.black)
+                .background(canSubmit ? Color.white : Color.white.opacity(0.25))
+                .foregroundColor(canSubmit ? .black : Color(white: 0.5))
                 .cornerRadius(12)
             }
             .disabled(!canSubmit || isLoading)
@@ -106,13 +114,16 @@ struct LoginView: View {
             .padding(.top, 8)
 
             // Trennlinie "oder"
-            HStack {
-                VStack { Divider().background(Color.secondary) }
+            HStack(spacing: 12) {
+                Rectangle()
+                    .fill(Color.white.opacity(0.2))
+                    .frame(height: 1)
                 Text("oder")
                     .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 8)
-                VStack { Divider().background(Color.secondary) }
+                    .foregroundColor(Color(white: 0.5))
+                Rectangle()
+                    .fill(Color.white.opacity(0.2))
+                    .frame(height: 1)
             }
             .padding(.horizontal, 24)
 
@@ -142,7 +153,7 @@ struct LoginView: View {
 
 #Preview {
     ZStack {
-        Color.black.ignoresSafeArea()
+        Color(white: 0.07).ignoresSafeArea()
         LoginView()
             .environmentObject(AuthService())
     }

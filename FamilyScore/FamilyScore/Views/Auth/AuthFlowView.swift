@@ -14,7 +14,7 @@ struct AuthFlowView: View {
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Color(white: 0.07).ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // Header
@@ -28,7 +28,7 @@ struct AuthFlowView: View {
                         .foregroundColor(.white)
                     Text("Gemeinsam mehr erreichen")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color(white: 0.62))
                 }
                 .padding(.bottom, 32)
 
