@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: in_progress
+stopped_at: ~
+last_updated: "2026-05-17T11:07:00.000Z"
+last_activity: 2026-05-17 — Phase 3 Plan 01 (Wave 0) abgeschlossen — SQL-Migration + Test-Infrastruktur erstellt
+progress:
+  total_phases: 6
+  completed_phases: 2
+  total_plans: 11
+  completed_plans: 7
+  percent: 64
+---
+
 # Project State
 
 ## Project Reference
@@ -5,20 +21,21 @@
 See: .planning/PROJECT.md (updated 2026-05-15)
 
 **Core value:** Familienmitglieder sehen auf einen Blick, ob Pflichten und Freizeit fair aufgeteilt sind — Transparenz schafft Fairness ohne Diskussion
-**Current focus:** Phase 2 — Authentication (executing)
+**Current focus:** Phase 3 — Family Core (executing)
 
 ## Current Position
 
-Phase: 2 of 6 (Authentication)
-Plan: 3 of 3 in current phase (checkpoint — awaiting human verification)
-Status: In Progress (checkpoint: human-verify)
-Last activity: 2026-05-16 — 02-03 Tasks 1+2 complete (SignInWithAppleView Nonce-Fluss + FamilyScoreApp.swift @StateObject wiring)
+Phase: 3 of 6 (Family Core)
+Plan: 2 of 4 in current phase (Wave 1 — bereit)
+Status: In Progress
+Last activity: 2026-05-17 — Plan 03-01 (Wave 0) abgeschlossen; SQL-Migration + FamilyServiceProtocol + MockFamilyService + 10 Teststubs erstellt
 
-Progress: [███░░░░░░░] 28%
+Progress: [██████░░░░] 64%
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 3
 - Average duration: —
 - Total execution time: —
@@ -31,7 +48,8 @@ Progress: [███░░░░░░░] 28%
 | 2. Authentication | 2 | ~22min | ~11min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 01-02, 01-03, 02-01, 02-02
+
+- Last 5 plans: 01-01, 01-02, 01-03, 02-01, 02-02, 03-01
 - Trend: —
 
 *Updated after each plan completion*
@@ -56,6 +74,9 @@ Recent decisions affecting current work:
 - Auth Wave 2: rawNonce an Supabase signInWithIdToken, sha256(rawNonce) an Apple request.nonce — NIEMALS vertauschen (Pitfall 3 mitigiert)
 - Auth Wave 2: .task{} auf WindowGroup-Level in FamilyScoreApp.swift garantiert INITIAL_SESSION nie verpasst wird (Pitfall 2 mitigiert)
 - Auth Wave 2: Sign in with Apple Capability muss manuell in Xcode aktiviert werden (Signing & Capabilities → + Capability → Sign in with Apple)
+- Family Wave 0: FamilyServiceProtocol im Test-Target definiert (gleiche Entscheidung wie AuthServiceProtocol Phase 2)
+- Family Wave 0: MemberRole als eigenstaendige Datei (nicht inline in FamilyService) — saubere Imports in Tests und Views
+- Family Wave 0: SQL-Migration noch NICHT zur Datenbank gepusht — das ist Plan 02 Aufgabe (Supabase CLI push)
 
 ### Pending Todos
 
@@ -80,6 +101,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-16
-Stopped at: Phase 2 Plan 03 Tasks 1+2 complete — SignInWithAppleView (vollstaendiger Nonce-Fluss), LoginView (Apple-Button integriert), FamilyScoreApp.swift (@StateObject AuthService + RootView + .task). Task 3 Checkpoint wartet auf manuelle Verifikation auf echtem iOS-Geraet (AUTH-02: Sign in with Apple, AUTH-03: Session-Persistenz). Voraussetzung: "Sign in with Apple" Capability in Xcode aktivieren (Signing & Capabilities → + Capability). Resume-Signal: "AUTH verifiziert".
+Last session: 2026-05-17T11:07:00.000Z
+Stopped at: Completed 03-01-PLAN.md (Wave 0 abgeschlossen)
 Resume file: None
