@@ -120,6 +120,7 @@ func localizedError(from error: Error) -> String {
 // Muster: Protocol im selben File wie Mock ODER als eigene Datei (Phase 4: eigene Datei)
 // Target Membership: FamilyScore (App) ONLY — MockActivityService importiert via @testable
 
+@MainActor
 protocol ActivityServiceProtocol: AnyObject {
     var todayEntries: [ActivityEntry] { get }
     var categories: [CategoryConfig] { get }

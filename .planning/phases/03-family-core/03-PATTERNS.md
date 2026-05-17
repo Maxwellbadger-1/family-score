@@ -647,6 +647,7 @@ import Foundation
 import Combine
 @testable import FamilyScore
 
+@MainActor
 protocol FamilyServiceProtocol: AnyObject {
     var members: [FamilyMember] { get }
     var currentFamily: Family? { get }
