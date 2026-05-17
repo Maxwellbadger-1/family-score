@@ -11,14 +11,14 @@ final class FamilyServiceTests: XCTestCase {
 
     var mock: MockFamilyService!
 
-    override func setUp() async throws {
-        try await super.setUp()
+    override func setUp() {
+        super.setUp()
         mock = MockFamilyService()
     }
 
-    override func tearDown() async throws {
+    override func tearDown() {
         mock = nil
-        try await super.tearDown()
+        super.tearDown()
     }
 
     // FAM-01: createFamily() setzt currentFamily auf non-nil
