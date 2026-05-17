@@ -109,7 +109,7 @@ Plans:
 
 ### Phase 6: Settings & Polish
 **Goal**: Admins can configure the app for their family's needs; child-safe UI modes work correctly; the app is ready for App Store submission
-**App Store Submission ohne Mac**: Vollständig via GitHub Actions + fastlane möglich. Der macOS-Runner signiert die App und lädt sie zu App Store Connect hoch — kein lokaler Mac nötig. Setup: fastlane match (Zertifikate in Git-Repo) + fastlane deliver. Details werden in Phase-6-Plan ausgearbeitet.
+**App Store Submission ohne Mac**: Vollständig via GitHub Actions + fastlane möglich. Der macOS-Runner signiert die App und lädt sie zu App Store Connect hoch — kein lokaler Mac nötig. Setup: fastlane match (Zertifikate in Git-Repo) + fastlane deliver. Details in 06-04-PLAN.md ausgearbeitet.
 **Depends on**: Phase 5
 **Requirements**: SETTINGS-01, SETTINGS-02, KID-02, KID-03
 **Success Criteria** (what must be TRUE):
@@ -118,8 +118,12 @@ Plans:
   3. A member with the Child-simplified role sees a reduced UI: only their own score and tasks, large tap targets, no family comparison or settings access
   4. A member's UI mode (Adult / Child-simplified) can be changed by an Admin in Settings without requiring a device handoff
   5. App passes App Store technical checklist: no crashes on launch, privacy manifest present, no secrets in binary, correct entitlements on all targets
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 4 plans
+Plans:
+- [ ] 06-01-PLAN.md — Wave 0: CategoryConfig-Model, CategoryServiceProtocol + MockCategoryService, CategoryServiceTests-Stubs, SQL-Migration (point_weight CHECK-Constraint), [BLOCKING] schema push
+- [ ] 06-02-PLAN.md — Wave 1: CategoryService-Implementierung, SettingsView + CategorySettingsView + MemberSettingsView, MainTabView (Settings-Tab fuer Admin), FamilyScoreApp-Verdrahtung
+- [ ] 06-03-PLAN.md — Wave 2: KindDashboardView (Kind-vereinfacht UI), RootView Kind-Routing (role == .child), Appetize-Checkpoint (SC-1 bis SC-4)
+- [ ] 06-04-PLAN.md — Wave 3: PrivacyInfo.xcprivacy, fastlane-Konfiguration (Fastfile + Matchfile + Appfile), release.yml, Abschluss-Checkpoint
 
 ## Progress
 
@@ -133,4 +137,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Family Core | 3/4 + checkpoint | In Progress (checkpoint) | - |
 | 4. Activity Logging & Dashboard | 0/4 | Ready to execute | - |
 | 5. Real-time & Widgets | 0/4 | Ready to plan | - |
-| 6. Settings & Polish | 0/TBD | Not started | - |
+| 6. Settings & Polish | 0/4 | Planned | - |
