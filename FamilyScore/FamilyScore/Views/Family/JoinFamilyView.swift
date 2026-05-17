@@ -62,7 +62,7 @@ struct JoinFamilyView: View {
                         .focused($isFocused)
                         .submitLabel(.go)
                         .onSubmit { if canSubmit { Task { await submit() } } }
-                        .onChange(of: inviteCode) { _, new in
+                        .onChange(of: inviteCode) { new in
                             if new.count > 8 { inviteCode = String(new.prefix(8)) }
                             inviteCode = inviteCode.uppercased()
                         }
