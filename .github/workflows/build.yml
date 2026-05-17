@@ -3,8 +3,14 @@ name: iOS Build & Test
 on:
   push:
     branches: [master]
+    paths:
+      - 'FamilyScore/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [master]
+    paths:
+      - 'FamilyScore/**'
+      - '.github/workflows/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -67,25 +73,7 @@ jobs:
             -scheme FamilyScore \
             -clonedSourcePackagesDirPath ~/spm-packages
 
-      # Build: generic/platform=iOS Simulator erlaubt, da kein Simulator gestartet wird
-      - name: Build for Simulator
-        working-directory: FamilyScore
-        run: |
-          set -o pipefail
-          xcodebuild build \
-            -project FamilyScore.xcodeproj \
-            -scheme FamilyScore \
-            -destination 'generic/platform=iOS Simulator' \
-            -configuration Debug \
-            -clonedSourcePackagesDirPath ~/spm-packages \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            SYMROOT=$(pwd)/build \
-            OBJROOT=$(pwd)/build/obj \
-            | xcpretty
-
-      # Tests: konkreten Simulator per UDID auswaehlen um OS:latest-Problem zu umgehen
+      # Simulator-UDID VOR dem Build ermitteln — wird fuer test-without-building benoetigt
       - name: Select Simulator
         id: sim
         run: |
@@ -102,20 +90,43 @@ jobs:
           echo "Selected simulator UDID: $UDID"
           echo "udid=$UDID" >> $GITHUB_OUTPUT
 
+      # build-for-testing kompiliert App + Test-Target in einem Schritt.
+      # test-without-building nutzt genau dieses Build — kein zweites Kompilieren.
+      # -jobs nutzt alle verfuegbaren Cores des macOS-Runners.
+      - name: Build for Testing
+        working-directory: FamilyScore
+        run: |
+          set -o pipefail
+          xcodebuild build-for-testing \
+            -project FamilyScore.xcodeproj \
+            -scheme FamilyScore \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            -clonedSourcePackagesDirPath ~/spm-packages \
+            -jobs $(sysctl -n hw.logicalcpu) \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            SYMROOT=$(pwd)/build \
+            OBJROOT=$(pwd)/build/obj \
+            | xcpretty
+
       - name: Run Unit Tests
         working-directory: FamilyScore
         run: |
           set -o pipefail
-          xcodebuild test \
+          xcodebuild test-without-building \
             -project FamilyScore.xcodeproj \
             -scheme FamilyScore \
             -destination 'id=${{ steps.sim.outputs.udid }}' \
             -configuration Debug \
             -clonedSourcePackagesDirPath ~/spm-packages \
+            -jobs $(sysctl -n hw.logicalcpu) \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             SYMROOT=$(pwd)/build \
+            OBJROOT=$(pwd)/build/obj \
             | xcpretty
 
       - name: Upload app to Appetize.io
