@@ -5,7 +5,7 @@
 // Threat mitigations: T-3-01, T-3-02, T-3-03, T-3-04, T-3-05, T-3-06, T-3-07
 
 import Foundation
-import Supabase
+@preconcurrency import Supabase
 
 @MainActor
 final class FamilyService: ObservableObject {
