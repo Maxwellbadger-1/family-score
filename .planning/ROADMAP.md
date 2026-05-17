@@ -100,8 +100,12 @@ Plans:
   5. Home Screen large Quick-Entry widget shows category buttons that start an activity via AppIntent (iOS 17+ interactive behavior)
   6. Home Screen medium widget shows the current user's three personal rings
   7. User receives an opt-in push notification when any family member logs an activity (delivered via Supabase Edge Function)
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 4 plans
+Plans:
+- [ ] 05-01-PLAN.md — Wave 0: WidgetData.swift erweitern (5 neue Felder), FamilyScoreEntry um data: WidgetData, URL-Scheme project.yml, Test-Infrastruktur (MockRealtimeService + 5 Testklassen), App Group + Realtime-Publikation Checkpoint
+- [ ] 05-02-PLAN.md — Wave 1: RealtimeService (XCTest-Guard, Channel-Lifecycle, scenePhase), WidgetDataWriter (Singleton, Debounce), FamilyScoreProvider (echter Provider), WIDGET-01..03+05 Widget-Views, FamilyScoreApp scenePhase-Handler
+- [ ] 05-03-PLAN.md — Wave 2: LogActivityIntent in FamilyScoreKit, QuickEntryWidget WIDGET-04 (#available iOS 17+), drainPendingWidgetLogs(), Geraet-Checkpoint alle 5 Widgets
+- [ ] 05-04-PLAN.md — Wave 3 (Spike): device_push_tokens Migration, [BLOCKING] supabase db push, NotificationService, Edge Function push-notification, Database Webhook, SYNC-03 Geraet-Checkpoint
 
 ### Phase 6: Settings & Polish
 **Goal**: Admins can configure the app for their family's needs; child-safe UI modes work correctly; the app is ready for App Store submission
@@ -128,5 +132,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
 | 3. Family Core | 1/4 | In Progress | - |
 | 4. Activity Logging & Dashboard | 0/4 | Ready to execute | - |
-| 5. Real-time & Widgets | 0/TBD | Not started | - |
+| 5. Real-time & Widgets | 0/4 | Ready to plan | - |
 | 6. Settings & Polish | 0/TBD | Not started | - |
