@@ -10,12 +10,14 @@ struct FamilyScoreApp: App {
     // @StateObject: Lebenszyklus wird vom SwiftUI-Framework verwaltet (iOS 16 Muster)
     // NICHT @Observable — iOS 17+ und inkompatibel mit @StateObject-Injection
     @StateObject private var authService = AuthService()
+    @StateObject private var familyService = FamilyService()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 // EnvironmentObject-Injection fuer alle Views im Hierarchy
                 .environmentObject(authService)
+                .environmentObject(familyService)
                 // startObserving() MUSS hier starten — nicht in einer untergeordneten View.
                 // Pitfall 2: Wird .task erst in RootView oder LoginView aufgerufen,
                 // kann INITIAL_SESSION bereits gesendet worden sein bevor die Beobachtung startet.
