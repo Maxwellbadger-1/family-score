@@ -119,4 +119,19 @@ final class AuthService: ObservableObject {
         }
         return "Ein Fehler ist aufgetreten. Bitte erneut versuchen."
     }
+
+    // MARK: - Family Status Refresh (Phase 3)
+
+    /// Wird von Views nach createFamily() und joinFamily() aufgerufen.
+    /// FamilyService gibt die neue family_id zurueck; die View ruft danach refreshFamilyStatus()
+    /// auf AuthService auf. So bleibt die Dependency-Richtung sauber:
+    /// Views → Services (nie Services → Services direkt).
+    ///
+    /// Pitfall 3 (RESEARCH.md): authStateChanges feuert kein neues Event wenn
+    /// family_members.family_id sich aendert — daher manueller refresh noetig.
+    func refreshFamilyStatus() async {
+        guard let userId = currentUser?.id else { return }
+        let hasFamily = await checkFamilyMembership(userId: userId)
+        appState = .authenticated(hasFamily: hasFamily)
+    }
 }
