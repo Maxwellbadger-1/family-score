@@ -24,7 +24,7 @@ private func requireInfoPlistString(_ key: String) -> String {
 }
 
 let supabase = SupabaseClient(
-    supabaseURL: URL(string: requireInfoPlistString("SUPABASE_URL"))!,
+    supabaseURL: URL(string: "https://" + requireInfoPlistString("SUPABASE_URL"))!,
     supabaseKey: requireInfoPlistString("SUPABASE_KEY"),
     options: SupabaseClientOptions(
         auth: SupabaseClientOptions.AuthOptions(

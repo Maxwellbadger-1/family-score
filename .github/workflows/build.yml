@@ -36,8 +36,11 @@ jobs:
 
       - name: Create Secrets.xcconfig
         run: |
+          # xcconfig behandelt // als Kommentar-Delimiter — https:// wird zu https:
+          # Loesung: nur den Host speichern, Supabase.swift ergaenzt https:// beim Lesen
+          SUPABASE_HOST=$(echo "${{ secrets.SUPABASE_URL_SECRET }}" | sed 's|https://||')
           cat > FamilyScore/Config/Secrets.xcconfig << EOF
-          SUPABASE_URL_SECRET = ${{ secrets.SUPABASE_URL_SECRET }}
+          SUPABASE_URL_SECRET = $SUPABASE_HOST
           SUPABASE_KEY_SECRET = ${{ secrets.SUPABASE_KEY_SECRET }}
           EOF
 
