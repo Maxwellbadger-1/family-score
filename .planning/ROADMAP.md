@@ -66,7 +66,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Wave 0: SQL-Migrationsdatei (child_profiles DDL, 4 SECURITY DEFINER RPCs, RLS-Policies), FamilyService-Test-Infrastruktur (FamilyServiceProtocol, MockFamilyService, 10 Teststubs) *(completed 2026-05-17)*
 - [x] 03-02-PLAN.md — Wave 1: FamilyService (ObservableObject, 10 Protocol-Methoden, 4 RPCs) + AuthService.refreshFamilyStatus() *(completed 2026-05-17)*
-- [ ] 03-03-PLAN.md — Wave 2: SwiftUI Family-Views (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView)
+- [x] 03-03-PLAN.md — Wave 2: SwiftUI Family-Views (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView) *(7 Views 2026-05-17 — iOS 16 @EnvironmentObject, refreshFamilyStatus() verknuepft, Admin-Actions)*
 - [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Appetize-Checkpoint (5 Success Criteria via Appetize.io; FAM-02 Invite-Flow braucht zwei Appetize-Sessions)
 
 ### Phase 4: Activity Logging & Dashboard

@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: in_progress
 stopped_at: ~
-last_updated: "2026-05-17T08:25:00.000Z"
-last_activity: 2026-05-17 — Phase 3 Plan 02 (Wave 1) abgeschlossen — FamilyService + AuthService.refreshFamilyStatus() implementiert
+last_updated: "2026-05-17T12:00:00.000Z"
+last_activity: 2026-05-17 — Phase 3 Plan 03 (Wave 2) abgeschlossen — 7 SwiftUI Family-Views implementiert
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 11
-  completed_plans: 8
-  percent: 73
+  completed_plans: 9
+  percent: 75
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 3 of 6 (Family Core)
-Plan: 3 of 4 in current phase (Wave 2 — Views bereit)
+Plan: 4 of 4 in current phase (Wave 2 — Views abgeschlossen)
 Status: In Progress
-Last activity: 2026-05-17 — Plan 03-02 (Wave 1) abgeschlossen; FamilyService (ObservableObject, alle 10 Protocol-Methoden, 4 RPCs) + AuthService.refreshFamilyStatus() implementiert
+Last activity: 2026-05-17 — Plan 03-03 (Wave 2) abgeschlossen; 7 SwiftUI Family-Views implementiert (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView)
 
-Progress: [██████░░░░] 64%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
@@ -104,6 +104,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-17T08:25:00.000Z
-Stopped at: Completed 03-02-PLAN.md (Wave 1 abgeschlossen)
+Last session: 2026-05-17T12:00:00.000Z
+Stopped at: Completed 03-03-PLAN.md (Wave 2 abgeschlossen)
 Resume file: None
