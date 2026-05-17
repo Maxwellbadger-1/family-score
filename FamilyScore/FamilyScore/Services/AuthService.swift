@@ -75,7 +75,9 @@ final class AuthService: ObservableObject {
     }
 
     func signOut() async throws {
-        try await supabase.auth.signOut()
+        // .local loescht nur die lokale Session + Keychain ohne Netzwerkanfrage.
+        // Funktioniert auch wenn das JWT abgelaufen ist (globaler Scope wuerde mit 401 fehlschlagen).
+        try await supabase.auth.signOut(scope: .local)
         // authStateChanges feuert SIGNED_OUT → startObserving() setzt appState = .unauthenticated
         // Keychain wird von supabase-swift automatisch geleert
     }
