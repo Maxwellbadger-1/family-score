@@ -67,7 +67,7 @@ Plans:
 - [x] 03-01-PLAN.md — Wave 0: SQL-Migrationsdatei (child_profiles DDL, 4 SECURITY DEFINER RPCs, RLS-Policies), FamilyService-Test-Infrastruktur (FamilyServiceProtocol, MockFamilyService, 10 Teststubs) *(completed 2026-05-17)*
 - [x] 03-02-PLAN.md — Wave 1: FamilyService (ObservableObject, 10 Protocol-Methoden, 4 RPCs) + AuthService.refreshFamilyStatus() *(completed 2026-05-17)*
 - [x] 03-03-PLAN.md — Wave 2: SwiftUI Family-Views (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView) *(7 Views 2026-05-17 — iOS 16 @EnvironmentObject, refreshFamilyStatus() verknuepft, Admin-Actions)*
-- [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Appetize-Checkpoint (5 Success Criteria via Appetize.io; FAM-02 Invite-Flow braucht zwei Appetize-Sessions)
+- [ ] 03-04-PLAN.md — Wave 3: App-Verdrahtung (RootView + FamilyScoreApp), Test-Suite gruen, Appetize-Checkpoint (5 Success Criteria via Appetize.io; FAM-02 Invite-Flow braucht zwei Appetize-Sessions) *(Tasks 1+2 abgeschlossen 2026-05-17 — Task 3: checkpoint:human-verify ausstehend)*
 
 ### Phase 4: Activity Logging & Dashboard
 **Goal**: Family members can log activities and see time and score data for themselves and the whole family — the complete core product loop works end to end
@@ -130,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
-| 3. Family Core | 1/4 | In Progress | - |
+| 3. Family Core | 3/4 + checkpoint | In Progress (checkpoint) | - |
 | 4. Activity Logging & Dashboard | 0/4 | Ready to execute | - |
 | 5. Real-time & Widgets | 0/4 | Ready to plan | - |
 | 6. Settings & Polish | 0/TBD | Not started | - |

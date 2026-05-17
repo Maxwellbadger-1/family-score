@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: in_progress
 stopped_at: ~
-last_updated: "2026-05-17T12:00:00.000Z"
-last_activity: 2026-05-17 — Phase 3 Plan 03 (Wave 2) abgeschlossen — 7 SwiftUI Family-Views implementiert
+last_updated: "2026-05-17T13:00:00.000Z"
+last_activity: 2026-05-17 — Phase 3 Plan 04 Tasks 1+2 abgeschlossen — App-Verdrahtung (RootView + FamilyScoreApp); Task 3 Checkpoint ausstehend
 progress:
   total_phases: 6
   completed_phases: 2
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 3 of 6 (Family Core)
-Plan: 4 of 4 in current phase (Wave 2 — Views abgeschlossen)
-Status: In Progress
-Last activity: 2026-05-17 — Plan 03-03 (Wave 2) abgeschlossen; 7 SwiftUI Family-Views implementiert (FamilyOnboardingView, CreateFamilyView, JoinFamilyView, MemberListView, InviteSheet, RolePickerSheet, AddChildView)
+Plan: 4 of 4 in current phase (Wave 3 — App-Verdrahtung, Checkpoint ausstehend)
+Status: In Progress — checkpoint:human-verify ausstehend (SC-1 bis SC-5 via Appetize.io)
+Last activity: 2026-05-17 — Plan 03-04 Tasks 1+2 abgeschlossen; RootView auf FamilyOnboardingView verdrahtet, FamilyService als @StateObject injiziert; Task 3 Checkpoint wartet auf Appetize.io-Verifikation
 
 Progress: [███████░░░] 75%
 
@@ -104,6 +104,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-17T12:00:00.000Z
-Stopped at: Completed 03-03-PLAN.md (Wave 2 abgeschlossen)
+Last session: 2026-05-17T13:00:00.000Z
+Stopped at: 03-04-PLAN.md Task 3 — checkpoint:human-verify (SC-1 bis SC-5 via Appetize.io ausstehend)
 Resume file: None
