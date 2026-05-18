@@ -96,13 +96,13 @@ struct CreateFamilyView: View {
         var dbg = "[DEBUG]\n"
         do {
             let sess = try await supabase.auth.session
-            let exp = sess.expiresAt
-            let remaining = Int(exp.timeIntervalSinceNow)
+            let expDate = Date(timeIntervalSince1970: sess.expiresAt)
+            let remaining = Int(expDate.timeIntervalSinceNow)
             dbg += "uid: \(sess.user.id)\n"
             dbg += "email: \(sess.user.email ?? "nil")\n"
             dbg += "token: \(String(sess.accessToken.prefix(30)))\n"
             dbg += "exp in: \(remaining)s\n"
-            dbg += "expired: \(exp < Date())\n"
+            dbg += "expired: \(expDate < Date())\n"
         } catch {
             dbg += "session() FEHLER: \(error)\n"
         }
