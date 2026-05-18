@@ -30,7 +30,19 @@ final class AuthService: ObservableObject {
         for await (event, session) in await supabase.auth.authStateChanges {
             print("[Auth] Event: \(event), session: \(session != nil ? "vorhanden" : "nil")")
             switch event {
-            case .initialSession, .signedIn:
+            case .initialSession:
+                // emitLocalSessionAsInitialSession: true — Session kann abgelaufen sein.
+                // isExpired-Check noetig; abgelaufene Session → warten auf SIGNED_OUT/SIGNED_IN.
+                if let session, !session.isExpired {
+                    currentUser = session.user
+                    print("[Auth] Checking family membership fuer user: \(session.user.id)")
+                    let hasFamily = await checkFamilyMembership(userId: session.user.id)
+                    print("[Auth] hasFamily: \(hasFamily)")
+                    appState = .authenticated(hasFamily: hasFamily)
+                } else {
+                    appState = .unauthenticated
+                }
+            case .signedIn:
                 if let session {
                     currentUser = session.user
                     print("[Auth] Checking family membership fuer user: \(session.user.id)")
@@ -44,7 +56,7 @@ final class AuthService: ObservableObject {
                 currentUser = nil
                 appState = .unauthenticated
             case .tokenRefreshed:
-                break
+                if let session { currentUser = session.user }
             default:
                 break
             }
@@ -75,9 +87,15 @@ final class AuthService: ObservableObject {
     }
 
     func signOut() async throws {
-        // .local loescht nur die lokale Session + Keychain ohne Netzwerkanfrage.
-        // Funktioniert auch wenn das JWT abgelaufen ist (globaler Scope wuerde mit 401 fehlschlagen).
-        try await supabase.auth.signOut(scope: .local)
+        do {
+            // .local loescht nur die lokale Session + Keychain ohne Netzwerkanfrage.
+            try await supabase.auth.signOut(scope: .local)
+        } catch {
+            // sessionMissing oder Netzwerkfehler: SDK-Session bereits weg, State manuell zuruecksetzen.
+            currentUser = nil
+            appState = .unauthenticated
+            return
+        }
         // authStateChanges feuert SIGNED_OUT → startObserving() setzt appState = .unauthenticated
         // Keychain wird von supabase-swift automatisch geleert
     }

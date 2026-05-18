@@ -28,9 +28,15 @@ let supabase = SupabaseClient(
     supabaseKey: requireInfoPlistString("SUPABASE_KEY"),
     options: SupabaseClientOptions(
         auth: SupabaseClientOptions.AuthOptions(
-            storage: KeychainLocalStorage(service: "com.familyscore")
+            storage: KeychainLocalStorage(service: "com.familyscore"),
             // Expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
             // Source: github.com/orgs/supabase/discussions/28132
+            //
+            // emitLocalSessionAsInitialSession: Gespeicherte Session sofort emitten,
+            // unabhaengig von Gueltigkeit. Verhindert Race-Condition bei gescheitertem
+            // Initial-Refresh (SDK-Bug, behoben in naechstem Major-Release).
+            // Source: supabase-swift PR #822
+            emitLocalSessionAsInitialSession: true
         )
     )
 )
