@@ -3,6 +3,7 @@
 // Analog: RegisterView.swift (Phase 2) -- ein Eingabefeld + Submit-Muster
 
 import SwiftUI
+@preconcurrency import Supabase
 
 struct CreateFamilyView: View {
     @EnvironmentObject private var authService: AuthService
@@ -90,15 +91,38 @@ struct CreateFamilyView: View {
         guard canSubmit else { return }
         isLoading = true
         defer { isLoading = false }
+
+        // DEBUG: Session-Info sammeln und anzeigen
+        var dbg = "[DEBUG]\n"
+        do {
+            let sess = try await supabase.auth.session
+            let exp = sess.expiresAt
+            let remaining = Int(exp.timeIntervalSinceNow)
+            dbg += "uid: \(sess.user.id)\n"
+            dbg += "email: \(sess.user.email ?? "nil")\n"
+            dbg += "token: \(String(sess.accessToken.prefix(30)))\n"
+            dbg += "exp in: \(remaining)s\n"
+            dbg += "expired: \(exp < Date())\n"
+        } catch {
+            dbg += "session() FEHLER: \(error)\n"
+        }
+        do {
+            let r = try await supabase.auth.refreshSession()
+            dbg += "refresh: OK uid=\(r.user.id)\n"
+        } catch {
+            dbg += "refresh: FEHLER \(error)\n"
+        }
+        familyService.serviceError = dbg
+        // 5s Pause damit der Text lesbar ist
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
+
         do {
             _ = try await familyService.createFamily(
                 name: familyName.trimmingCharacters(in: .whitespaces)
             )
-            // AppState updaten: authStateChanges feuert kein Event bei family_id-Aenderung
-            // refreshFamilyStatus() prueft family_members erneut -> AppState = .authenticated(hasFamily: true)
             await authService.refreshFamilyStatus()
         } catch {
-            familyService.serviceError = error.localizedDescription
+            familyService.serviceError = dbg + "\nRPC: \(error)"
         }
     }
 }
