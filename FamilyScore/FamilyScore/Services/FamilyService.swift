@@ -71,8 +71,6 @@ final class FamilyService: ObservableObject {
             let familyName: String
             enum CodingKeys: String, CodingKey { case familyName = "family_name" }
         }
-        // Session vor RPC sicherstellen — schlaegt still fehl wenn kein Refresh moeglich
-        _ = try? await supabase.auth.refreshSession()
         do {
             let familyId: UUID = try await supabase
                 .rpc("create_family", params: Params(familyName: name))
