@@ -30,18 +30,15 @@ private func requireInfoPlistString(_ key: String) -> String {
 // @unchecked Sendable ist sicher: UserDefaults.standard ist thread-safe (Apple-Garantie).
 private final class UserDefaultsLocalStorage: AuthLocalStorage, @unchecked Sendable {
     private let prefix = "sb.auth."
-    private enum E: Error { case notFound }
 
     func store(key: String, value: Data) throws {
         UserDefaults.standard.set(value, forKey: prefix + key)
         print("[Supabase] Session gespeichert (UserDefaults): \(key)")
     }
 
-    func retrieve(key: String) throws -> Data {
-        guard let data = UserDefaults.standard.data(forKey: prefix + key) else {
-            throw E.notFound
-        }
-        print("[Supabase] Session geladen (UserDefaults): \(key)")
+    func retrieve(key: String) throws -> Data? {
+        let data = UserDefaults.standard.data(forKey: prefix + key)
+        if data != nil { print("[Supabase] Session geladen (UserDefaults): \(key)") }
         return data
     }
 
