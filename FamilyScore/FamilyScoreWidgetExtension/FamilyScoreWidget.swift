@@ -37,16 +37,25 @@ struct FamilyScoreWidgetEntryView: View {
     }
 }
 
+private extension View {
+    /// `containerBackground(_:for:)` ist erst ab iOS 17 verfügbar.
+    /// Auf iOS 16 (Lock-Screen-Widgets, siehe CLAUDE.md) entfällt der Modifier.
+    @ViewBuilder
+    func widgetContainerBackground() -> some View {
+        if #available(iOS 17.0, *) {
+            containerBackground(.fill.tertiary, for: .widget)
+        } else {
+            self
+        }
+    }
+}
+
 struct FamilyScoreWidget: Widget {
     let kind: String = "FamilyScoreWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: FamilyScoreProvider()) { entry in
-            if #available(iOS 17, *) {
-                FamilyScoreWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                FamilyScoreWidgetEntryView(entry: entry)
-            }
+            FamilyScoreWidgetEntryView(entry: entry)
+                .widgetContainerBackground()
         }
         .configurationDisplayName("Family Score")
         .description("Zeigt den Familien-Score.")

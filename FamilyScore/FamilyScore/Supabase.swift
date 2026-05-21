@@ -1,7 +1,10 @@
 // FamilyScore/Supabase.swift
 // Target Membership: FamilyScore (App) ONLY — NIEMALS Widget Extension!
-// KeychainLocalStorage: expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
-// Source: github.com/orgs/supabase/discussions/28132 (Pattern 5 aus RESEARCH.md)
+// UserDefaultsLocalStorage: KeychainLocalStorage schlägt in virtuellen Umgebungen
+// (Appetize.io, bestimmte CI-Simulatoren) lautlos fehl → Session-Reads geben nil
+// zurück → supabase fällt auf Anon-Key zurück → alle RLS-Calls fehlschlagen.
+// UserDefaults ist in allen Umgebungen zuverlässig und für Auth-Tokens (kurzlebig,
+// kein langfristiger Wert ohne Refresh) ausreichend.
 import Foundation
 import Supabase
 
@@ -23,15 +26,37 @@ private func requireInfoPlistString(_ key: String) -> String {
     return value
 }
 
+// UserDefaults-basierter Auth-Storage — funktioniert in Appetize.io, Simulator, echtem Gerät.
+// @unchecked Sendable ist sicher: UserDefaults.standard ist thread-safe (Apple-Garantie).
+private final class UserDefaultsLocalStorage: AuthLocalStorage, @unchecked Sendable {
+    private let prefix = "sb.auth."
+    private enum E: Error { case notFound }
+
+    func store(key: String, value: Data) throws {
+        UserDefaults.standard.set(value, forKey: prefix + key)
+        print("[Supabase] Session gespeichert (UserDefaults): \(key)")
+    }
+
+    func retrieve(key: String) throws -> Data {
+        guard let data = UserDefaults.standard.data(forKey: prefix + key) else {
+            throw E.notFound
+        }
+        print("[Supabase] Session geladen (UserDefaults): \(key)")
+        return data
+    }
+
+    func remove(key: String) throws {
+        UserDefaults.standard.removeObject(forKey: prefix + key)
+        print("[Supabase] Session entfernt (UserDefaults): \(key)")
+    }
+}
+
 let supabase = SupabaseClient(
     supabaseURL: URL(string: "https://" + requireInfoPlistString("SUPABASE_URL"))!,
     supabaseKey: requireInfoPlistString("SUPABASE_KEY"),
     options: SupabaseClientOptions(
         auth: SupabaseClientOptions.AuthOptions(
-            storage: KeychainLocalStorage(service: "com.familyscore"),
-            // Expliziter Service-Name verhindert Keychain-Prompt-Bug auf macOS/iOS
-            // Source: github.com/orgs/supabase/discussions/28132
-            //
+            storage: UserDefaultsLocalStorage(),
             // emitLocalSessionAsInitialSession: Gespeicherte Session sofort emitten,
             // unabhaengig von Gueltigkeit. Verhindert Race-Condition bei gescheitertem
             // Initial-Refresh (SDK-Bug, behoben in naechstem Major-Release).

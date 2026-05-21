@@ -24,6 +24,7 @@ Secrets.xcconfig
 # XcodeGen — .xcodeproj wird in CI generiert, nicht commiten
 *.xcodeproj/
 !*.xcodeproj/project.xcworkspace/
+FamilyScore/FamilyScoreWidgetExtension/Info.plist
 
 # CI Build-Output
 FamilyScore/build/

@@ -87,23 +87,15 @@ struct CreateFamilyView: View {
     }
 
     private func submit() async {
-        print("[CreateFamily] submit() START — name='\(familyName)' canSubmit=\(canSubmit)")
-        guard canSubmit else {
-            print("[CreateFamily] submit() ABBRUCH — canSubmit=false")
-            return
-        }
+        guard canSubmit else { return }
         isLoading = true
         defer { isLoading = false }
         do {
-            print("[CreateFamily] createFamily() wird aufgerufen...")
             _ = try await familyService.createFamily(
                 name: familyName.trimmingCharacters(in: .whitespaces)
             )
-            print("[CreateFamily] createFamily() OK — refreshFamilyStatus()...")
             await authService.refreshFamilyStatus()
-            print("[CreateFamily] refreshFamilyStatus() OK")
         } catch {
-            print("[CreateFamily] FEHLER: \(error)")
             familyService.serviceError = error.localizedDescription
         }
     }

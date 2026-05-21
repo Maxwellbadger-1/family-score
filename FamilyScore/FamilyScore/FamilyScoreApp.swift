@@ -3,6 +3,7 @@
 // Entry Point: @StateObject AuthService + RootView als Content + .environmentObject Injection
 
 import SwiftUI
+import Supabase
 
 @main
 struct FamilyScoreApp: App {

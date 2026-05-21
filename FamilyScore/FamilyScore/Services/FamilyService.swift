@@ -67,29 +67,17 @@ final class FamilyService: ObservableObject {
     /// T-3-07: create_family RPC prueft serverseitig ob User bereits einer Familie angehoert.
     /// Kein Client-seitiger Admin-Check — SECURITY DEFINER RPC uebernimmt das.
     func createFamily(name: String) async throws -> UUID {
-        print("[FamilyService] createFamily('\(name)') START")
-        do {
-            let sess = try await supabase.auth.session
-            print("[FamilyService] Session OK: user=\(sess.user.id) expires=\(Date(timeIntervalSince1970: sess.expiresAt))")
-        } catch {
-            print("[FamilyService] Session FEHLER: \(error)")
-        }
         struct Params: Encodable {
             let familyName: String
             enum CodingKeys: String, CodingKey { case familyName = "family_name" }
         }
         do {
-            print("[FamilyService] RPC create_family → wird gesendet...")
             let familyId: UUID = try await supabase
                 .rpc("create_family", params: Params(familyName: name))
                 .execute()
                 .value
-            print("[FamilyService] RPC create_family OK: \(familyId)")
             return familyId
         } catch {
-            print("[FamilyService] RPC FEHLER Typ: \(type(of: error))")
-            print("[FamilyService] RPC FEHLER: \(error)")
-            print("[FamilyService] RPC localizedDescription: \(error.localizedDescription)")
             let msg = error.localizedDescription.lowercased()
             if msg.contains("bereits einer familie") || msg.contains("already") {
                 throw FamilyServiceError.alreadyInFamily
