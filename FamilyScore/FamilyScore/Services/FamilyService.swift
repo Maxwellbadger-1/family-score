@@ -141,8 +141,8 @@ final class FamilyService: ObservableObject {
             let family_id: String
             let created_by: String
             let role: String
+            let token: String
         }
-        struct InviteResponse: Decodable { let token: String }
 
         let currentUserId: UUID
         do {
@@ -151,25 +151,21 @@ final class FamilyService: ObservableObject {
             throw FamilyServiceError.notAuthenticated
         }
 
-        let response: InviteResponse = try await supabase
+        // Token client-seitig generieren damit DB-Wert = Anzeige-Code (accept_invite RPC macht exakten Match).
+        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let displayCode = String((0..<8).map { _ in chars.randomElement()! })
+
+        try await supabase
             .from("family_invites")
             .insert(NewInvite(
                 family_id: familyId.uuidString,
                 created_by: currentUserId.uuidString,
-                role: role.rawValue
+                role: role.rawValue,
+                token: displayCode
             ))
-            .select("token")
-            .single()
             .execute()
-            .value
 
-        // Nur alphanumerische Zeichen, 8 Stellen, Uppercase.
-        // Vermeidet Base64-Sonderzeichen (+, /, =) die schlecht abtippbar sind.
-        let displayCode = response.token
-            .filter { $0.isLetter || $0.isNumber }
-            .prefix(8)
-            .uppercased()
-        return String(displayCode)
+        return displayCode
     }
 
     // MARK: - Admin-Aktionen (via SECURITY DEFINER RPCs)
