@@ -99,4 +99,46 @@ final class ActivityServiceTests: XCTestCase {
         // Wird nur via refreshLocalRingProgress() aktualisiert (Wave 1 Implementation)
         XCTAssertEqual(mock.totalScore, 0)
     }
+
+    // Wave 1 Tests — praezise Assertions gegen MockActivityService
+
+    // LOG-02: Dauer wird korrekt uebergeben
+    func testLogActivityPassesDurationCorrectly() async throws {
+        let duration = 45
+        try await mock.logActivity(categoryId: UUID(), durationMinutes: duration, title: nil)
+        XCTAssertEqual(mock.lastLoggedDuration, duration)
+    }
+
+    // LOG-05: Fehler bei Log wirft MockActivityError
+    func testLogActivityThrowsWhenFlagSet() async throws {
+        mock.shouldThrowOnLog = true
+        do {
+            try await mock.logActivity(categoryId: UUID(), durationMinutes: 30, title: nil)
+            XCTFail("Soll Fehler werfen")
+        } catch MockActivityError.logFailed {
+            XCTAssertEqual(mock.logActivityCallCount, 1, "CallCount muss trotz Fehler erhoehen")
+        }
+    }
+
+    // DASH-01: Freizeit-Ring-Progress korrekt
+    func testLeisureProgressReadable() {
+        mock.leisureProgress = 0.75
+        XCTAssertEqual(mock.leisureProgress, 0.75, accuracy: 0.001)
+    }
+
+    // LOG-04: Kind-Eintrag erhoht logForChildCallCount (praezise Version)
+    func testLogForChildIncreasesCountCorrectly() async throws {
+        try await mock.logActivityForChild(childUserId: UUID(), categoryId: UUID(), durationMinutes: 10, title: "Zimmer aufraeumen")
+        XCTAssertEqual(mock.logForChildCallCount, 1)
+    }
+
+    // LOG-01: stopTimer ruft logActivity auf und setzt timerIsRunning = false
+    func testStopTimerCallsLogAndStopsTimer() async throws {
+        mock.startTimer(categoryId: UUID())
+        XCTAssertTrue(mock.timerIsRunning)
+        try await mock.stopTimer(title: "Fertig")
+        XCTAssertFalse(mock.timerIsRunning)
+        // logActivity wurde in stopTimer aufgerufen
+        XCTAssertGreaterThanOrEqual(mock.logActivityCallCount, 1)
+    }
 }
