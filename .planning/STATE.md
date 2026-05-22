@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 04 (activity-logging-dashboard) — EXECUTING
-Plan: 2 of 4
+Plan: 2 of 4 (04-02 Wave 1: ActivityService)
 Status: Ready to execute
 Last activity: 2026-05-22
 
@@ -80,6 +80,8 @@ Recent decisions affecting current work:
 - Family Wave 1: FamilyService implementiert FamilyServiceProtocol strukturell (Duck-Typing) — Protocol im Test-Target, keine explizite Konformanz-Deklaration noetig
 - Family Wave 1: updateProfile() verwendet direktes REST-UPDATE (nicht RPC) — RLS-Policy sichert display_name/avatar_color-Only ab; role/family_id unveraenderbar via diesem Pfad
 - Family Wave 1: refreshFamilyStatus() in AuthService (nicht FamilyService) — Dependency-Richtung Views -> Services eingehalten
+- Activity Wave 0: ActivityServiceProtocol im App-Target definiert (analog AuthServiceProtocol Phase 2); RingType:Equatable fuer XCTAssertEqual noetig (Rule 1 Fix)
+- Activity Wave 0: 4 SECURITY DEFINER RPCs via mcp__supabase__apply_migration live eingespielt; beide Testfamilien hatten bereits 4 Kategorien (kein Seeding per Hand noetig)
 
 ### Pending Todos
 
@@ -104,6 +106,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-22T06:57:37.617Z
-Stopped at: 03-04-PLAN.md Task 3 — checkpoint:human-verify (SC-1 bis SC-5 via Appetize.io ausstehend)
+Last session: 2026-05-22T09:00:00Z
+Stopped at: 04-01 Wave 0 ABGESCHLOSSEN — alle 4 Tasks erledigt (Migration live, 4 RPCs in DB)
 Resume file: None

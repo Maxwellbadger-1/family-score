@@ -27,7 +27,7 @@ decisions:
 metrics:
   duration_seconds: 198
   completed_date: "2026-05-22"
-  tasks_completed: 3
+  tasks_completed: 4
   tasks_total: 4
   files_created: 5
   files_modified: 1
@@ -44,6 +44,7 @@ metrics:
 | 1 | ActivityServiceProtocol + alle Model-Typen | 475c676 | ActivityServiceProtocol.swift (neu) |
 | 2 | MockActivityService + ActivityServiceTests + RingProgressTests | 9a7719f | 3 Test-Dateien + RingType:Equatable Fix |
 | 3 | SQL-Migration 20260516_phase4_rpcs.sql | a120182 | 20260516_phase4_rpcs.sql (neu) |
+| 4 | Supabase-Migration live eingespielt (4 RPCs) | — (MCP-Aktion) | Live-DB: get_today_score, get_family_today_scores, create_activity_for_child, insert_default_categories |
 
 ## What Was Built
 
@@ -85,24 +86,19 @@ Der Plan-Snapshot von ActivityServiceProtocol in PATTERNS.md hatte eine kleinere
 - `logActivityForChild(...)` als Methode
 - `allTimeStats: AllTimeStats?` als Property
 
-## Pending: Task 4 (Checkpoint)
+## Task 4: Supabase-Migration live eingespielt
 
-**Task 4 ist ein `checkpoint:human-action` (blocking):**
-Die SQL-Migration muss manuell via `mcp__supabase__apply_migration` eingespielt werden.
+**Status: ABGESCHLOSSEN**
 
-Migration-Datei: `FamilyScore/supabase/migrations/20260516_phase4_rpcs.sql`
+`mcp__supabase__apply_migration` (migration_name: "phase4_rpcs") erfolgreich ausgefuehrt (success: true).
 
-**Validierung nach dem Push:**
-```sql
-SELECT routine_name FROM information_schema.routines
-WHERE routine_schema = 'public'
-AND routine_name IN ('get_today_score','get_family_today_scores','create_activity_for_child','insert_default_categories');
--- Muss 4 Zeilen zurueckgeben
+**Ergebnis in der Live-DB:**
+- `get_today_score` — live
+- `get_family_today_scores` — live
+- `create_activity_for_child` — live
+- `insert_default_categories` — live
 
-SELECT insert_default_categories('<deine-family-id>');
-SELECT * FROM category_config;
--- Muss 4 Kategorien zurueckgeben
-```
+**category_config:** Beide Testfamilien haben bereits 4 Kategorien (Haushalt, Hobby/Freizeit, Besorgungen, Arbeit/Schule) — kein Seeding per Hand noetig.
 
 ## Known Stubs
 
