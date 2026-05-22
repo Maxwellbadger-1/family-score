@@ -19,26 +19,26 @@
 
 ### LOG — Activity Logging
 
-- [ ] **LOG-01**: User kann eine Aktivität mit Timer erfassen (Start/Stop) — Zeit wird automatisch berechnet
-- [ ] **LOG-02**: User kann eine Aktivität retroaktiv eintragen: Kategorie + Dauer in Minuten + optionaler Titel
+- [x] **LOG-01**: User kann eine Aktivität mit Timer erfassen (Start/Stop) — Zeit wird automatisch berechnet
+- [x] **LOG-02**: User kann eine Aktivität retroaktiv eintragen: Kategorie + Dauer in Minuten + optionaler Titel
 - [ ] **LOG-03**: User kann einem Eintrag einen freien Titel geben (z.B. "Küche geputzt")
-- [ ] **LOG-04**: User kann Einträge für Kinder-Profile erstellen (Eltern-managed)
+- [x] **LOG-04**: User kann Einträge für Kinder-Profile erstellen (Eltern-managed)
 - [ ] **LOG-05**: User kann einen Eintrag löschen (nur eigene, Admins dürfen alle)
-- [ ] **LOG-06**: Aktivitäten werden einer von 4 Kategorien zugeordnet: Haushalt, Hobby/Freizeit, Besorgungen, Arbeit/Schule
+- [x] **LOG-06**: Aktivitäten werden einer von 4 Kategorien zugeordnet: Haushalt, Hobby/Freizeit, Besorgungen, Arbeit/Schule
 
 ### DASH — Dashboard & Statistics
 
 - [ ] **DASH-01**: Hauptansicht zeigt persönliche Ringe für heute: Pflicht-Ring (Haushalt + Besorgungen + Arbeit), Freizeit-Ring (Hobby), Score-Ring
 - [ ] **DASH-02**: Familienvergleich-Ansicht zeigt alle Mitglieder nebeneinander mit heutiger Bilanz (Stunden Pflicht vs. Freizeit + Score)
 - [ ] **DASH-03**: Wochenbilanz-Ansicht zeigt Pflicht vs. Freizeit für alle Mitglieder diese Woche + Wochensieger
-- [ ] **DASH-04**: Gesamt-Statistiken: alle Stunden und Punkte seit App-Start pro Person
+- [x] **DASH-04**: Gesamt-Statistiken: alle Stunden und Punkte seit App-Start pro Person
 - [ ] **DASH-05**: Aktivitäts-Feed: chronologische Liste aller Einträge der Familie heute
 
 ### SCORE — Punkte-System
 
-- [ ] **SCORE-01**: Jede Aktivitätskategorie hat einen konfigurierbaren Punkte-Multiplikator (Punkte = Minuten × Multiplikator)
-- [ ] **SCORE-02**: Score wird als Summe aller Aktivitäts-Punkte berechnet (append-only, kein mutabler total_score)
-- [ ] **SCORE-03**: Score wird täglich und wöchentlich aggregiert und in der UI angezeigt
+- [x] **SCORE-01**: Jede Aktivitätskategorie hat einen konfigurierbaren Punkte-Multiplikator (Punkte = Minuten × Multiplikator)
+- [x] **SCORE-02**: Score wird als Summe aller Aktivitäts-Punkte berechnet (append-only, kein mutabler total_score)
+- [x] **SCORE-03**: Score wird täglich und wöchentlich aggregiert und in der UI angezeigt
 
 ### WIDGET — Widgets
 
@@ -105,20 +105,20 @@
 | FAM-05 | Phase 3 | Pending |
 | KID-01 | Phase 3 | Pending |
 | SETTINGS-03 | Phase 3 | Pending |
-| LOG-01 | Phase 4 | Pending |
-| LOG-02 | Phase 4 | Pending |
+| LOG-01 | Phase 4 | Complete |
+| LOG-02 | Phase 4 | Complete |
 | LOG-03 | Phase 4 | Pending |
-| LOG-04 | Phase 4 | Pending |
+| LOG-04 | Phase 4 | Complete |
 | LOG-05 | Phase 4 | Pending |
-| LOG-06 | Phase 4 | Pending |
+| LOG-06 | Phase 4 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 4 | Pending |
-| DASH-04 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Complete |
 | DASH-05 | Phase 4 | Pending |
-| SCORE-01 | Phase 4 | Pending |
-| SCORE-02 | Phase 4 | Pending |
-| SCORE-03 | Phase 4 | Pending |
+| SCORE-01 | Phase 4 | Complete |
+| SCORE-02 | Phase 4 | Complete |
+| SCORE-03 | Phase 4 | Complete |
 | SYNC-01 | Phase 5 | Pending |
 | SYNC-02 | Phase 5 | Pending |
 | SYNC-03 | Phase 5 | Pending |

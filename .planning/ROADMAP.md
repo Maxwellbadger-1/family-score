@@ -82,7 +82,7 @@ Plans:
   6. Week summary view shows each member's totals for the current week and names the weekly leader
 **Plans**: 4 plans
 Plans:
-- [ ] 04-01-PLAN.md — Wave 0: ActivityServiceProtocol + alle Modelle, MockActivityService, XCTest-Stubs (ActivityServiceTests + RingProgressTests), SQL-Migration 20260516_phase4_rpcs.sql (4 RPCs), [BLOCKING] supabase db push
+- [x] 04-01-PLAN.md — Wave 0: ActivityServiceProtocol + alle Modelle, MockActivityService, XCTest-Stubs (ActivityServiceTests + RingProgressTests), SQL-Migration 20260516_phase4_rpcs.sql (4 RPCs), [BLOCKING] supabase db push
 - [ ] 04-02-PLAN.md — Wave 1: ActivityService (ObservableObject, CRUD + Timer + Optimistic UI + RPC-Calls), ActivityEntry-Stub
 - [ ] 04-03-PLAN.md — Wave 2: Dashboard-UI (SingleRingView, RingClusterView, DashboardView, WeekSummaryView) + ActivityLogSheet
 - [ ] 04-04-PLAN.md — Wave 3: ActivityListView + ActivityRowView, App-Verdrahtung (TabView, @StateObject Injection), Test-Suite gruen, Appetize-Checkpoint
@@ -135,6 +135,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
 | 3. Family Core | 3/4 + checkpoint | In Progress (checkpoint) | - |
-| 4. Activity Logging & Dashboard | 0/4 | Ready to execute | - |
+| 4. Activity Logging & Dashboard | 1/4 | In Progress|  |
 | 5. Real-time & Widgets | 0/4 | Ready to plan | - |
 | 6. Settings & Polish | 0/4 | Planned | - |
