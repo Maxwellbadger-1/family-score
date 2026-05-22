@@ -17,6 +17,26 @@ final class FamilyService: ObservableObject {
 
     // MARK: - Familie laden
 
+    /// Lädt die eigene Familie anhand der family_id aus family_members des aktuellen Users.
+    /// Wird in MemberListView aufgerufen wenn currentFamily noch nicht gesetzt ist.
+    func fetchCurrentFamily() async {
+        do {
+            let userId = try await supabase.auth.session.user.id
+            struct Row: Decodable { let family_id: UUID? }
+            let rows: [Row] = try await supabase
+                .from("family_members")
+                .select("family_id")
+                .eq("id", value: userId.uuidString)
+                .limit(1)
+                .execute()
+                .value
+            guard let familyId = rows.first?.family_id else { return }
+            await fetchFamily(familyId: familyId)
+        } catch {
+            serviceError = "Familie konnte nicht geladen werden."
+        }
+    }
+
     func fetchFamily(familyId: UUID) async {
         do {
             let family: Family = try await supabase

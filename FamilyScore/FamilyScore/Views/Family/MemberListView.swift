@@ -108,6 +108,9 @@ struct MemberListView: View {
                 .environmentObject(familyService)
         }
         .task {
+            if familyService.currentFamily == nil {
+                await familyService.fetchCurrentFamily()
+            }
             if let familyId = familyService.currentFamily?.id {
                 await familyService.fetchMembers(familyId: familyId)
                 await familyService.fetchChildProfiles(familyId: familyId)
