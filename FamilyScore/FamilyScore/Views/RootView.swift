@@ -28,8 +28,8 @@ struct RootView: View {
                     FamilyOnboardingView()
 
                 case .authenticated(hasFamily: true):
-                    // Phase 4 liefert MainTabView
-                    AuthenticatedPlaceholderView()
+                    // Phase 4: DashboardView als Haupt-Screen
+                    DashboardView()
                 }
             }
 

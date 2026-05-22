@@ -12,6 +12,7 @@ struct FamilyScoreApp: App {
     // NICHT @Observable — iOS 17+ und inkompatibel mit @StateObject-Injection
     @StateObject private var authService = AuthService()
     @StateObject private var familyService = FamilyService()
+    @StateObject private var activityService = ActivityService()
 
     var body: some Scene {
         WindowGroup {
@@ -19,6 +20,7 @@ struct FamilyScoreApp: App {
                 // EnvironmentObject-Injection fuer alle Views im Hierarchy
                 .environmentObject(authService)
                 .environmentObject(familyService)
+                .environmentObject(activityService)
                 // startObserving() MUSS hier starten — nicht in einer untergeordneten View.
                 // Pitfall 2: Wird .task erst in RootView oder LoginView aufgerufen,
                 // kann INITIAL_SESSION bereits gesendet worden sein bevor die Beobachtung startet.
@@ -34,6 +36,10 @@ struct FamilyScoreApp: App {
                 // Hintergrund: App wird schwarz wenn scenePhase = .background
                 // Foreground: authStateChanges wird durch supabase-swift automatisch weitergefuehrt
                 // Realtime reconnect (Phase 5) kommt spaeter; hier nur Auth-State beobachten
+                // Rule 2: currentFamilyId in ActivityService synken wenn Familie geladen wird
+                .onChange(of: familyService.currentFamily?.id) { newFamilyId in
+                    activityService.currentFamilyId = newFamilyId
+                }
         }
     }
 }
