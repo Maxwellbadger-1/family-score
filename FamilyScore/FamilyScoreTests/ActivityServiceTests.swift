@@ -11,13 +11,11 @@ final class ActivityServiceTests: XCTestCase {
     var mock: MockActivityService!
 
     override func setUp() async throws {
-        try await super.setUp()
         mock = MockActivityService()
     }
 
     override func tearDown() async throws {
         mock = nil
-        try await super.tearDown()
     }
 
     // LOG-01: Timer startet korrekt
