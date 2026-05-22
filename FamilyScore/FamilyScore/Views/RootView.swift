@@ -28,8 +28,16 @@ struct RootView: View {
                     FamilyOnboardingView()
 
                 case .authenticated(hasFamily: true):
-                    // Phase 4: DashboardView als Haupt-Screen
-                    DashboardView()
+                    // Phase 4: TabView mit DashboardView (Tab 1) und ActivityListView (Tab 2)
+                    // currentFamilyId-Injection: Option A (aus PATTERNS.md) — wird von FamilyScoreApp.swift
+                    // via .onChange(of: familyService.currentFamily?.id) in activityService gesetzt.
+                    // FamilyScoreApp.swift ist die einzige Stelle (kein doppeltes .onChange noetig).
+                    TabView {
+                        DashboardView()
+                            .tabItem { Label("Uebersicht", systemImage: "house.fill") }
+                        ActivityListView()
+                            .tabItem { Label("Verlauf", systemImage: "list.bullet") }
+                    }
                 }
             }
 
