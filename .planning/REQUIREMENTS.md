@@ -21,9 +21,9 @@
 
 - [x] **LOG-01**: User kann eine Aktivität mit Timer erfassen (Start/Stop) — Zeit wird automatisch berechnet
 - [x] **LOG-02**: User kann eine Aktivität retroaktiv eintragen: Kategorie + Dauer in Minuten + optionaler Titel
-- [ ] **LOG-03**: User kann einem Eintrag einen freien Titel geben (z.B. "Küche geputzt")
+- [x] **LOG-03**: User kann einem Eintrag einen freien Titel geben (z.B. "Küche geputzt")
 - [x] **LOG-04**: User kann Einträge für Kinder-Profile erstellen (Eltern-managed)
-- [ ] **LOG-05**: User kann einen Eintrag löschen (nur eigene, Admins dürfen alle)
+- [x] **LOG-05**: User kann einen Eintrag löschen (nur eigene, Admins dürfen alle)
 - [x] **LOG-06**: Aktivitäten werden einer von 4 Kategorien zugeordnet: Haushalt, Hobby/Freizeit, Besorgungen, Arbeit/Schule
 
 ### DASH — Dashboard & Statistics
@@ -32,7 +32,7 @@
 - [ ] **DASH-02**: Familienvergleich-Ansicht zeigt alle Mitglieder nebeneinander mit heutiger Bilanz (Stunden Pflicht vs. Freizeit + Score)
 - [ ] **DASH-03**: Wochenbilanz-Ansicht zeigt Pflicht vs. Freizeit für alle Mitglieder diese Woche + Wochensieger
 - [x] **DASH-04**: Gesamt-Statistiken: alle Stunden und Punkte seit App-Start pro Person
-- [ ] **DASH-05**: Aktivitäts-Feed: chronologische Liste aller Einträge der Familie heute
+- [x] **DASH-05**: Aktivitäts-Feed: chronologische Liste aller Einträge der Familie heute
 
 ### SCORE — Punkte-System
 
@@ -107,15 +107,15 @@
 | SETTINGS-03 | Phase 3 | Pending |
 | LOG-01 | Phase 4 | Complete |
 | LOG-02 | Phase 4 | Complete |
-| LOG-03 | Phase 4 | Pending |
+| LOG-03 | Phase 4 | Complete |
 | LOG-04 | Phase 4 | Complete |
-| LOG-05 | Phase 4 | Pending |
+| LOG-05 | Phase 4 | Complete |
 | LOG-06 | Phase 4 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 4 | Pending |
 | DASH-04 | Phase 4 | Complete |
-| DASH-05 | Phase 4 | Pending |
+| DASH-05 | Phase 4 | Complete |
 | SCORE-01 | Phase 4 | Complete |
 | SCORE-02 | Phase 4 | Complete |
 | SCORE-03 | Phase 4 | Complete |

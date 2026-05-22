@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "03-04-PLAN.md Task 3 — checkpoint:human-verify (SC-1 bis SC-5 via Appetize.io ausstehend)"
-last_updated: "2026-05-22T06:57:37.642Z"
+stopped_at: 04-01 Wave 0 ABGESCHLOSSEN — alle 4 Tasks erledigt (Migration live, 4 RPCs in DB)
+last_updated: "2026-05-22T07:36:15.055Z"
 last_activity: 2026-05-22
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 19
-  completed_plans: 11
+  completed_plans: 12
   percent: 33
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-15)
 ## Current Position
 
 Phase: 04 (activity-logging-dashboard) — EXECUTING
-Plan: 2 of 4 (04-02 Wave 1: ActivityService)
+Plan: 3 of 4 (04-02 Wave 1: ActivityService)
 Status: Ready to execute
 Last activity: 2026-05-22
 
-Progress: [██████░░░░] 58%
+Progress: [██████░░░░] 63%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 58%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 04 P02 | 480 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,7 @@ Recent decisions affecting current work:
 - Family Wave 1: refreshFamilyStatus() in AuthService (nicht FamilyService) — Dependency-Richtung Views -> Services eingehalten
 - Activity Wave 0: ActivityServiceProtocol im App-Target definiert (analog AuthServiceProtocol Phase 2); RingType:Equatable fuer XCTAssertEqual noetig (Rule 1 Fix)
 - Activity Wave 0: 4 SECURITY DEFINER RPCs via mcp__supabase__apply_migration live eingespielt; beide Testfamilien hatten bereits 4 Kategorien (kein Seeding per Hand noetig)
+- [Phase ?]: Activity Wave 1: currentFamilyId als settable Property — FamilyScoreApp.swift setzt sie nach Family-Load
 
 ### Pending Todos
 
@@ -106,6 +108,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-05-22T09:00:00Z
+Last session: 2026-05-22T07:36:07.189Z
 Stopped at: 04-01 Wave 0 ABGESCHLOSSEN — alle 4 Tasks erledigt (Migration live, 4 RPCs in DB)
 Resume file: None
