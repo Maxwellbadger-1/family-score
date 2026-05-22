@@ -30,9 +30,8 @@ note: Code "N2OIARIU" generiert, "Code kopieren" + "Neuen Code generieren" sicht
 
 ### 4. Familie beitreten (mit Code)
 expected: In JoinFamilyView 8-Zeichen-Code eingeben und abschicken → User joined Familie, AppState wechselt zu authenticated(hasFamily: true).
-result: issue
-reported: "Ungültiger oder abgelaufener Einladungscode — Code N2OIARIU eingegeben, Fehler erscheint"
-severity: major
+result: pass
+note: Fix verifiziert — Code funktioniert nach generateInvite-Fix (commit 2bbbeb2)
 
 ### 5. Mitgliederliste anzeigen
 expected: MemberListView zeigt alle Familienmitglieder mit Name und Avatar-Farbe. Kind-Profile erscheinen in eigenem Abschnitt.
@@ -61,8 +60,8 @@ result: pass
 ## Summary
 
 total: 9
-passed: 8
-issues: 1
+passed: 9
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
