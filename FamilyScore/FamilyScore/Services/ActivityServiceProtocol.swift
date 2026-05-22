@@ -7,7 +7,7 @@ import Foundation
 
 // MARK: - Enums
 
-enum RingType { case duty, leisure }
+enum RingType: Equatable { case duty, leisure }
 
 // MARK: - Model: ActivityEntry
 
