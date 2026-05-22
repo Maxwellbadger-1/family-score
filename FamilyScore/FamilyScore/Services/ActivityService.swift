@@ -6,6 +6,7 @@
 //                    T-4-05 (duration_minutes cap max 240)
 
 import Foundation
+import SwiftUI
 @preconcurrency import Supabase
 
 @MainActor
