@@ -28,9 +28,9 @@
 
 ### DASH — Dashboard & Statistics
 
-- [ ] **DASH-01**: Hauptansicht zeigt persönliche Ringe für heute: Pflicht-Ring (Haushalt + Besorgungen + Arbeit), Freizeit-Ring (Hobby), Score-Ring
-- [ ] **DASH-02**: Familienvergleich-Ansicht zeigt alle Mitglieder nebeneinander mit heutiger Bilanz (Stunden Pflicht vs. Freizeit + Score)
-- [ ] **DASH-03**: Wochenbilanz-Ansicht zeigt Pflicht vs. Freizeit für alle Mitglieder diese Woche + Wochensieger
+- [x] **DASH-01**: Hauptansicht zeigt persönliche Ringe für heute: Pflicht-Ring (Haushalt + Besorgungen + Arbeit), Freizeit-Ring (Hobby), Score-Ring
+- [x] **DASH-02**: Familienvergleich-Ansicht zeigt alle Mitglieder nebeneinander mit heutiger Bilanz (Stunden Pflicht vs. Freizeit + Score)
+- [x] **DASH-03**: Wochenbilanz-Ansicht zeigt Pflicht vs. Freizeit für alle Mitglieder diese Woche + Wochensieger
 - [x] **DASH-04**: Gesamt-Statistiken: alle Stunden und Punkte seit App-Start pro Person
 - [x] **DASH-05**: Aktivitäts-Feed: chronologische Liste aller Einträge der Familie heute
 
@@ -111,9 +111,9 @@
 | LOG-04 | Phase 4 | Complete |
 | LOG-05 | Phase 4 | Complete |
 | LOG-06 | Phase 4 | Complete |
-| DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
-| DASH-03 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
+| DASH-02 | Phase 4 | Complete |
+| DASH-03 | Phase 4 | Complete |
 | DASH-04 | Phase 4 | Complete |
 | DASH-05 | Phase 4 | Complete |
 | SCORE-01 | Phase 4 | Complete |

@@ -84,7 +84,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Wave 0: ActivityServiceProtocol + alle Modelle, MockActivityService, XCTest-Stubs (ActivityServiceTests + RingProgressTests), SQL-Migration 20260516_phase4_rpcs.sql (4 RPCs), [BLOCKING] supabase db push *(completed 2026-05-22)*
 - [x] 04-02-PLAN.md — Wave 1: ActivityService (ObservableObject, CRUD + Timer + Optimistic UI + RPC-Calls), ActivityEntry-Stub
-- [ ] 04-03-PLAN.md — Wave 2: Dashboard-UI (SingleRingView, RingClusterView, DashboardView, WeekSummaryView) + ActivityLogSheet
+- [x] 04-03-PLAN.md — Wave 2: Dashboard-UI (SingleRingView, RingClusterView, DashboardView, WeekSummaryView) + ActivityLogSheet
 - [ ] 04-04-PLAN.md — Wave 3: ActivityListView + ActivityRowView, App-Verdrahtung (TabView, @StateObject Injection), Test-Suite gruen, Appetize-Checkpoint
 
 ### Phase 5: Real-time & Widgets
@@ -135,6 +135,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | 2026-05-15 |
 | 2. Authentication | 2/3 + checkpoint | In Progress (checkpoint) | - |
 | 3. Family Core | 3/4 + checkpoint | In Progress (checkpoint) | - |
-| 4. Activity Logging & Dashboard | 2/4 | In Progress|  |
+| 4. Activity Logging & Dashboard | 3/4 | In Progress|  |
 | 5. Real-time & Widgets | 0/4 | Ready to plan | - |
 | 6. Settings & Polish | 0/4 | Planned | - |
